@@ -6,6 +6,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "dev": "cross-env NODE_ENV=development nest start --watch",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -21,11 +22,22 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.0.9",
+    "@nestjs/typeorm": "^8.0.2",
+    "class-validator": "^0.13.1",
+    "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.10.6",
+    "mysql2": "^2.3.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.1.6",
+    "typeorm": "^0.2.36"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
