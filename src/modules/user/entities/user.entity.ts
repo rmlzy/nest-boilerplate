@@ -58,4 +58,10 @@ export class UserEntity {
    */
   @Column({ unsigned: true, default: 0 })
   logged: number;
+
+  /**
+   * Token
+   */
+  @Column({ length: 500, default: '', select: false })
+  token: string;
 }
