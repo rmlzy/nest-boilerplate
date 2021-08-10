@@ -7,31 +7,39 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController, Logged } from '@/core';
+import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { BaseController, Logged, UserId } from '@/core';
+import { UserArticleService } from '@/demo/user-article/user-article.service';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
 @ApiTags('文章')
+@ApiHeader({ name: 'token' })
 @Controller('article')
 export class ArticleController extends BaseController {
-  constructor(private readonly articleService: ArticleService) {
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly userArticleService: UserArticleService,
+  ) {
     super();
   }
 
   @ApiOperation({ description: '创建文章' })
   @Post()
   @Logged()
-  async create(@Body() createArticleDto: CreateArticleDto) {
-    const res = await this.articleService.create(createArticleDto);
+  async create(
+    @UserId() userId: string,
+    @Body() createArticleDto: CreateArticleDto,
+  ) {
+    const res = await this.articleService.create(userId, createArticleDto);
     return this.success(res);
   }
 
   @ApiOperation({ description: '查询文章列表' })
   @Get()
-  async findAll() {
-    const res = await this.articleService.findAll();
+  async findAll(@UserId() userId: string) {
+    const res = await this.userArticleService.findArticlesByUserId(userId);
     return this.success(res);
   }
 
@@ -56,8 +64,8 @@ export class ArticleController extends BaseController {
   @ApiOperation({ description: '删除文章' })
   @Delete(':id')
   @Logged()
-  async remove(@Param('id') id: string) {
-    const res = await this.articleService.remove(id);
+  async remove(@UserId() userId: string, @Param('id') articleId: string) {
+    const res = await this.articleService.remove(userId, articleId);
     return this.success(res);
   }
 }

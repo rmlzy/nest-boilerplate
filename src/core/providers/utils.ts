@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { IJwtPayload } from '@/system/auth/auth.interface';
 
 @Injectable()
 export class Utils {
@@ -28,5 +30,10 @@ export class Utils {
       return false;
     }
     return bcrypt.compareSync(password, hashedPassword);
+  }
+
+  static decodeToken(token): IJwtPayload {
+    const jwtService = new JwtService({});
+    return jwtService.decode(token, { json: true }) as IJwtPayload;
   }
 }

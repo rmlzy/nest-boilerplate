@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Not } from 'typeorm';
+import { Not, getConnection } from 'typeorm';
 import { BaseService } from '@/core';
+import { UserArticleService } from '@/demo/user-article/user-article.service';
+import { UserArticleEntity } from '@/demo/user-article/entities/user-article.entity';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { ArticleEntity } from './entities/article.entity';
@@ -8,18 +10,27 @@ import { ArticleRepository } from './entities/article.repository';
 
 @Injectable()
 export class ArticleService extends BaseService<ArticleEntity> {
-  constructor(private readonly articleRepo: ArticleRepository) {
+  constructor(
+    private readonly articleRepo: ArticleRepository,
+    private readonly userArticleService: UserArticleService,
+  ) {
     super(articleRepo);
   }
 
-  async create(createArticleDto: CreateArticleDto): Promise<ArticleEntity> {
+  async create(
+    userId: string,
+    createArticleDto: CreateArticleDto,
+  ): Promise<ArticleEntity> {
     const { title } = createArticleDto;
     await this.ensureNotExist({ title }, '文章标题已存在');
-    return this.articleRepo.save(createArticleDto);
-  }
-
-  async findAll(): Promise<ArticleEntity[]> {
-    return this.articleRepo.find();
+    let createdArticle;
+    await getConnection().transaction(async (manager) => {
+      createdArticle = await manager.save(ArticleEntity, createArticleDto);
+      await manager.save(UserArticleEntity, [
+        { userId, articleId: createdArticle.id },
+      ]);
+    });
+    return createdArticle;
   }
 
   async findOne(id: string): Promise<ArticleEntity> {
@@ -33,8 +44,12 @@ export class ArticleService extends BaseService<ArticleEntity> {
     await this.articleRepo.update({ id }, updateArticleDto);
   }
 
-  async remove(id: string): Promise<void> {
-    await this.ensureExist({ id }, '文章不存在');
-    await this.articleRepo.delete({ id });
+  async remove(userId: string, articleId: string): Promise<void> {
+    const exist = await this.userArticleService.exist(userId, articleId);
+    this.asset(exist, '文章不存在');
+    await getConnection().transaction(async (manager) => {
+      await manager.delete(ArticleEntity, { id: articleId });
+      await manager.delete(UserArticleEntity, { userId, articleId });
+    });
   }
 }

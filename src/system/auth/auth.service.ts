@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { BaseService } from '@/core';
+import { BaseService, Utils } from '@/core';
 import { UserService } from '@/system/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { IJwtPayload } from './auth.interface';
@@ -46,12 +46,8 @@ export class AuthService extends BaseService<any> {
     await this.userService.removeToken(user.id);
   }
 
-  decodeToken(token: string): IJwtPayload {
-    return this.jwtService.decode(token, { json: true }) as IJwtPayload;
-  }
-
   async updatePassword(token: string, newPassword: string): Promise<void> {
-    const { id } = this.decodeToken(token);
+    const { id } = Utils.decodeToken(token);
     this.asset(id, '未检测到用户');
     await this.userService.updatePassword(id, newPassword);
   }
