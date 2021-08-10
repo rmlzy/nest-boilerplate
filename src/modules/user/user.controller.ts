@@ -35,14 +35,14 @@ export class UserController {
   @ApiOperation({ description: '查询用户' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const res = await this.userService.findOne(+id);
+    const res = await this.userService.findOne(id);
     return { code: HttpStatus.OK, message: 'OK', data: res };
   }
 
   @ApiOperation({ description: '更新用户' })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const res = await this.userService.update(+id, updateUserDto);
+    const res = await this.userService.update(id, updateUserDto);
     return { code: HttpStatus.OK, message: 'OK', data: res };
   }
 

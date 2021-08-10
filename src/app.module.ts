@@ -6,6 +6,9 @@ import { config } from './config';
 // entities
 import { UserEntity } from './modules/user/entities/user.entity';
 
+// subscribers
+import { UserSubscriber } from '@/modules/user/entities/user.subscriber';
+
 // providers
 import { Utils } from './providers';
 
@@ -31,6 +34,7 @@ import { HealthModule } from './modules/health/health.module';
         username: config.get('MYSQL.USERNAME'),
         password: config.get('MYSQL.PASSWORD') as string,
         database: config.get('MYSQL.DATABASE') as string,
+        subscribers: [UserSubscriber],
         entities: [UserEntity],
         synchronize: true,
       }),

@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, UpdateDateColumn } from 'typeorm';
+import { BaseEntity } from '@/core';
 
 @Entity({ name: 'users' })
-export class UserEntity {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
-
+export class UserEntity extends BaseEntity {
   /**
    * 登录账号
    */
@@ -16,12 +14,6 @@ export class UserEntity {
    */
   @Column({ length: 64, select: false })
   password: string;
-
-  /**
-   * md5 密码盐
-   */
-  @Column({ length: 64, select: false })
-  salt: string;
 
   /**
    * 真实姓名
@@ -48,16 +40,13 @@ export class UserEntity {
   phone: string;
 
   /**
-   * 创建时间
-   */
-  @Column({ unsigned: true, default: 0 })
-  created: number;
-
-  /**
    * 上次登录时间
    */
-  @Column({ unsigned: true, default: 0 })
-  logged: number;
+  @UpdateDateColumn({
+    type: 'timestamp without time zone',
+    name: 'updated_at',
+  })
+  loggedAt: Date;
 
   /**
    * Token

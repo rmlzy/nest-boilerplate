@@ -21,7 +21,6 @@ export class UserService extends BaseService<UserEntity> {
       realname: realname || username,
       email,
       password,
-      created: this.getTimestamp(),
     });
     return null;
   }
@@ -54,7 +53,10 @@ export class UserService extends BaseService<UserEntity> {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
+  async update(
+    id: number | string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<void> {
     // TODO
     return null;
   }
