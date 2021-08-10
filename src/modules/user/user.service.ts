@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from '@/core';
-import { Utils } from '@/providers';
+import { BaseService, Utils } from '@/core';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './entities/user.repository';
@@ -23,7 +22,7 @@ export class UserService extends BaseService<UserEntity> {
     });
   }
 
-  async findAll(): Promise<UserEntity[]> {
+  async paginate(): Promise<UserEntity[]> {
     return this.userRepo.find();
   }
 
@@ -50,8 +49,7 @@ export class UserService extends BaseService<UserEntity> {
     if (!user) {
       return false;
     }
-    const valid = await Utils.validatePassword(password, user.password);
-    return valid;
+    return Utils.validatePassword(password, user.password);
   }
 
   async updatePassword(id: string, newPassword: string): Promise<void> {

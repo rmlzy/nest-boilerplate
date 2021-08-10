@@ -20,8 +20,8 @@ export class UserController extends BaseController {
 
   @ApiOperation({ description: '查询用户列表' })
   @Get()
-  async findAll() {
-    const res = await this.userService.findAll();
+  async paginate() {
+    const res = await this.userService.paginate();
     return this.success(res);
   }
 

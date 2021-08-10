@@ -17,17 +17,16 @@ export class Utils {
     return (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  // doc: https://github.com/kelektiv/node.bcrypt.js
   static generateHashedPassword(password: string): string {
-    return bcrypt.hashSync(password, 10);
+    const saltRounds = 10;
+    return bcrypt.hashSync(password, saltRounds);
   }
 
-  static validatePassword(
-    password: string,
-    hashedPassword: string,
-  ): Promise<boolean> {
+  static validatePassword(password: string, hashedPassword: string): boolean {
     if (!password || !hashedPassword) {
-      return Promise.resolve(false);
+      return false;
     }
-    return bcrypt.compare(password, hashedPassword);
+    return bcrypt.compareSync(password, hashedPassword);
   }
 }

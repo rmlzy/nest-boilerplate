@@ -4,7 +4,7 @@ import type {
   UpdateEvent,
 } from 'typeorm';
 import { EventSubscriber } from 'typeorm';
-import { Utils } from '@/providers';
+import { Utils } from '@/core';
 import { UserEntity } from './user.entity';
 
 @EventSubscriber()

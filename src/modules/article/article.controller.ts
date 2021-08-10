@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController } from '@/core';
+import { BaseController, Logged } from '@/core';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -22,6 +22,7 @@ export class ArticleController extends BaseController {
 
   @ApiOperation({ description: '创建文章' })
   @Post()
+  @Logged()
   async create(@Body() createArticleDto: CreateArticleDto) {
     const res = await this.articleService.create(createArticleDto);
     return this.success(res);
@@ -43,6 +44,7 @@ export class ArticleController extends BaseController {
 
   @ApiOperation({ description: '更新文章' })
   @Patch(':id')
+  @Logged()
   async update(
     @Param('id') id: string,
     @Body() updateArticleDto: UpdateArticleDto,
@@ -53,6 +55,7 @@ export class ArticleController extends BaseController {
 
   @ApiOperation({ description: '删除文章' })
   @Delete(':id')
+  @Logged()
   async remove(@Param('id') id: string) {
     const res = await this.articleService.remove(id);
     return this.success(res);
