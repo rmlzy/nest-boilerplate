@@ -1,17 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { BaseController } from '@/core';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('用户')
 @Controller('user')
@@ -38,20 +29,6 @@ export class UserController extends BaseController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const res = await this.userService.findOne(id);
-    return this.success(res);
-  }
-
-  @ApiOperation({ description: '更新用户' })
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const res = await this.userService.update(id, updateUserDto);
-    return this.success(res);
-  }
-
-  @ApiOperation({ description: '删除用户' })
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const res = await this.userService.remove(id);
     return this.success(res);
   }
 }

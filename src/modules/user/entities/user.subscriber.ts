@@ -22,7 +22,10 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   }
 
   beforeUpdate(event: UpdateEvent<UserEntity>): void {
-    if (event.entity.password !== event.databaseEntity.password) {
+    if (
+      event.entity.password &&
+      event.entity.password !== event.databaseEntity.password
+    ) {
       event.entity.password = Utils.generateHashedPassword(
         event.entity.password,
       );

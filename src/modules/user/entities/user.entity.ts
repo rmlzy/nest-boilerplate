@@ -3,53 +3,27 @@ import { BaseEntity } from '@/core';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
-  /**
-   * 登录账号
-   */
-  @Column({ length: 15 })
+  @Column({ length: 15, comment: '登录账号' })
   username: string;
 
-  /**
-   * 密码
-   */
-  @Column({ length: 64, select: false })
+  @Column({ length: 64, select: false, comment: '密码' })
   password: string;
 
-  /**
-   * 真实姓名
-   */
-  @Column({ length: 15 })
+  @Column({ length: 15, comment: '真实姓名' })
   realname: string;
 
-  /**
-   * 头像
-   */
-  @Column({ length: 512 })
+  @Column({ length: 512, comment: '头像URL' })
   avatar: string;
 
-  /**
-   * 电子邮件
-   */
-  @Column({ length: 256 })
+  @Column({ length: 200, comment: '电子邮件' })
   email: string;
 
-  /**
-   * 电话
-   */
-  @Column({ length: 15 })
+  @Column({ length: 15, comment: '手机号码' })
   phone: string;
 
-  /**
-   * 上次登录时间
-   */
-  @UpdateDateColumn({
-    type: 'datetime',
-  })
-  loggedAt: Date;
+  @Column({ comment: '上次登录时间', default: '' })
+  loggedAt: string;
 
-  /**
-   * Token
-   */
-  @Column({ length: 500, default: '', select: false })
+  @Column({ length: 500, select: false, comment: 'Token' })
   token: string;
 }

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { BaseService } from '@/core';
 import { Utils } from '@/providers';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './entities/user.repository';
 
@@ -41,27 +40,27 @@ export class UserService extends BaseService<UserEntity> {
     return user;
   }
 
-  async verifyPassword(
-    username: string,
-    password: string,
-  ): Promise<void | UserEntity> {
-    const hashedPassword = Utils.generateHashedPassword(password);
-    const user = await this.userRepo.findOne({
-      username,
-      password: hashedPassword,
-    });
+  async findByUsername(username: string): Promise<void | UserEntity> {
+    const user = await this.ensureExist({ username }, '用户不存在');
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<void> {
-    // TODO
-    return null;
+  async verifyPassword(username: string, password: string): Promise<boolean> {
+    const user = await this.userRepo
+      .createQueryBuilder()
+      .where({ username })
+      .addSelect('UserEntity.password')
+      .getOne();
+    if (!user) {
+      return false;
+    }
+    const valid = await Utils.validatePassword(password, user.password);
+    return valid;
   }
 
-  async remove(id: string): Promise<void> {
+  async updatePassword(id: string, newPassword: string): Promise<void> {
     await this.ensureExist({ id }, '用户不存在');
-    await this.userRepo.delete({ id });
-    return null;
+    await this.userRepo.update({ id }, { password: newPassword });
   }
 
   async removeToken(id): Promise<void> {
@@ -73,7 +72,7 @@ export class UserService extends BaseService<UserEntity> {
     await this.ensureExist({ id }, '用户不存在');
     await this.userRepo.update(
       { id },
-      { token, loggedAt: this.getTimestamp() },
+      { token, loggedAt: new Date().toISOString() },
     );
   }
 }

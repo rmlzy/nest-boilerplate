@@ -5,17 +5,12 @@ import {
 } from 'typeorm';
 
 export class BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { comment: '唯一ID' })
   id: string;
 
-  // TODO: 自动更新
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
+  @CreateDateColumn({ comment: '创建时间' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-  })
+  @UpdateDateColumn({ comment: '更新时间' })
   updatedAt: Date;
 }

@@ -16,16 +16,21 @@ export class AuthService extends BaseService<any> {
     super(null);
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<string> {
     const { username, password } = loginDto;
-    const user = await this.userService.verifyPassword(username, password);
-    if (!user) {
+    // 校验用户密码
+    const valid = await this.userService.verifyPassword(username, password);
+    if (!valid) {
       throw new HttpException('用户名或密码无效', HttpStatus.CONFLICT);
     }
-    const payload: IJwtPayload = {
-      id: user.id,
-      username,
-    };
+
+    // 获取用户信息, 存储到 token 中
+    const user = await this.userService.findByUsername(username);
+    if (!user) {
+      throw new HttpException('未检测到用户', HttpStatus.CONFLICT);
+    }
+
+    const payload: IJwtPayload = { id: user.id, username };
     const token = this.jwtService.sign(payload, {
       expiresIn: this.configService.get('TOKEN_EXPIRES_IN'),
     });
@@ -33,12 +38,21 @@ export class AuthService extends BaseService<any> {
     return token;
   }
 
-  async logout(token) {
+  async logout(token: string): Promise<void> {
     const user = await this.userService.findByToken(token);
     if (!user) {
       throw new HttpException('未检测到用户', HttpStatus.CONFLICT);
     }
     await this.userService.removeToken(user.id);
-    return null;
+  }
+
+  decodeToken(token: string): IJwtPayload {
+    return this.jwtService.decode(token, { json: true }) as IJwtPayload;
+  }
+
+  async updatePassword(token: string, newPassword: string): Promise<void> {
+    const { id } = this.decodeToken(token);
+    this.asset(id, '未检测到用户');
+    await this.userService.updatePassword(id, newPassword);
   }
 }
