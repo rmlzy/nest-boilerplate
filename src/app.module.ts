@@ -14,6 +14,7 @@ import { Utils } from './providers';
 // modules
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UserModule } from './modules/user/user.module';
 
     UserModule,
     AuthModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService, Utils],
