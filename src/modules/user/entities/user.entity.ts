@@ -43,8 +43,7 @@ export class UserEntity extends BaseEntity {
    * 上次登录时间
    */
   @UpdateDateColumn({
-    type: 'timestamp without time zone',
-    name: 'updated_at',
+    type: 'timestamp',
   })
   loggedAt: Date;
 

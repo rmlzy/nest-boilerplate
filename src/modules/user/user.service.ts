@@ -30,8 +30,8 @@ export class UserService extends BaseService<UserEntity> {
     return users;
   }
 
-  async findOne(id: number | string): Promise<void | UserEntity> {
-    const user = await this.ensureExist({ id: +id }, '用户不存在');
+  async findOne(id: string): Promise<void | UserEntity> {
+    const user = await this.ensureExist({ id }, '用户不存在');
     return user;
   }
 
@@ -53,15 +53,12 @@ export class UserService extends BaseService<UserEntity> {
     return user;
   }
 
-  async update(
-    id: number | string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<void> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<void> {
     // TODO
     return null;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.ensureExist({ id }, '用户不存在');
     await this.userRepo.delete({ id });
     return null;
@@ -72,8 +69,11 @@ export class UserService extends BaseService<UserEntity> {
     await this.userRepo.update({ id }, { token: '' });
   }
 
-  async setToken(id: number, token: string): Promise<void> {
+  async setToken(id: string, token: string): Promise<void> {
     await this.ensureExist({ id }, '用户不存在');
-    await this.userRepo.update({ id }, { token, logged: this.getTimestamp() });
+    await this.userRepo.update(
+      { id },
+      { token, loggedAt: this.getTimestamp() },
+    );
   }
 }
