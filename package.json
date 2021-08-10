@@ -32,6 +32,7 @@
     "@nestjs/terminus": "^7.2.0",
     "@nestjs/typeorm": "^8.0.2",
     "bcrypt": "^5.0.1",
+    "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",

@@ -17,8 +17,8 @@ export class BaseService<T> {
   }
 
   async ensureNotExist(where, errorMsg = '资源已存在') {
-    const existed = await this.repo.findOne({ where });
-    if (existed) {
+    const existed = await this.repo.count({ where });
+    if (existed > 0) {
       throw new HttpException(errorMsg, HttpStatus.CONFLICT);
     }
   }
