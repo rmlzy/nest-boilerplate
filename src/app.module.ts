@@ -3,19 +3,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './config';
 
+// providers
+import { Utils } from '@/providers';
+
 // entities
 import { UserEntity } from './modules/user/entities/user.entity';
+import { ArticleEntity } from './modules/article/entities/article.entity';
 
 // subscribers
-import { UserSubscriber } from '@/modules/user/entities/user.subscriber';
-
-// providers
-import { Utils } from './providers';
+import { UserSubscriber } from './modules/user/entities/user.subscriber';
 
 // modules
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { HealthModule } from './modules/health/health.module';
+import { ArticleModule } from './modules/article/article.module';
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import { HealthModule } from './modules/health/health.module';
         password: config.get('MYSQL.PASSWORD') as string,
         database: config.get('MYSQL.DATABASE') as string,
         subscribers: [UserSubscriber],
-        entities: [UserEntity],
+        entities: [UserEntity, ArticleEntity],
         synchronize: true,
       }),
     }),
@@ -43,6 +45,7 @@ import { HealthModule } from './modules/health/health.module';
     UserModule,
     AuthModule,
     HealthModule,
+    ArticleModule,
   ],
   controllers: [],
   providers: [Utils],

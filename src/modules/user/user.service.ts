@@ -11,33 +11,29 @@ export class UserService extends BaseService<UserEntity> {
     super(userRepo);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<void> {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, realname, email, password } = createUserDto;
     await this.ensureNotExist({ username }, '用户名已存在');
     await this.ensureNotExist({ email }, '电子邮箱地址已存在');
-    await this.userRepo.save({
+    return this.userRepo.save({
       username,
       realname: realname || username,
       email,
       password,
     });
-    return null;
   }
 
   async findAll(): Promise<UserEntity[]> {
-    const users = await this.userRepo.find();
-    return users;
+    return this.userRepo.find();
   }
 
-  async findOne(id: string): Promise<void | UserEntity> {
-    const user = await this.ensureExist({ id }, '用户不存在');
-    return user;
+  async findOne(id: string): Promise<UserEntity> {
+    return this.ensureExist({ id }, '用户不存在');
   }
 
-  async findByToken(token: string): Promise<void | UserEntity> {
+  async findByToken(token: string): Promise<UserEntity> {
     this.asset(token, '未检测到认证信息');
-    const user = await this.ensureExist({ token }, '用户不存在');
-    return user;
+    return this.ensureExist({ token }, '用户不存在');
   }
 
   async findByUsername(username: string): Promise<void | UserEntity> {

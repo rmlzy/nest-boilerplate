@@ -1,4 +1,4 @@
-import { Column, Entity, UpdateDateColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '@/core';
 
 @Entity({ name: 'users' })
