@@ -5,17 +5,17 @@ import { Utils } from '@/core';
 import { config } from './config';
 
 // entities
-import { UserEntity } from './modules/user/entities/user.entity';
-import { ArticleEntity } from './modules/article/entities/article.entity';
+import { UserEntity } from './system/user/entities/user.entity';
+import { ArticleEntity } from './demo/article/entities/article.entity';
 
 // subscribers
-import { UserSubscriber } from './modules/user/entities/user.subscriber';
+import { UserSubscriber } from './system/user/entities/user.subscriber';
 
 // modules
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
-import { HealthModule } from './modules/health/health.module';
-import { ArticleModule } from './modules/article/article.module';
+import { AuthModule } from './system/auth/auth.module';
+import { UserModule } from './system/user/user.module';
+import { HealthModule } from './system/health/health.module';
+import { ArticleModule } from './demo/article/article.module';
 
 @Module({
   imports: [

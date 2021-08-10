@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '@/core';
 
-@Entity({ name: 'user' })
+@Entity({ name: 'sys_user' })
 export class UserEntity extends BaseEntity {
   @Column({ length: 15, comment: '登录账号' })
   username: string;
