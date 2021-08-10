@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { BaseService } from '@/core';
-import { generateHashedPassword } from '@/utils';
+import { Utils } from '@/providers';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { UserRepository } from './entities/user.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity> {
-  constructor(
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-  ) {
+  constructor(private readonly userRepo: UserRepository) {
     super(userRepo);
   }
 
@@ -49,7 +46,7 @@ export class UserService extends BaseService<UserEntity> {
     username: string,
     password: string,
   ): Promise<void | UserEntity> {
-    const hashedPassword = generateHashedPassword(password);
+    const hashedPassword = Utils.generateHashedPassword(password);
     const user = await this.userRepo.findOne({
       username,
       password: hashedPassword,

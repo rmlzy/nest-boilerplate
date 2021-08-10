@@ -1,13 +1,13 @@
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { getTimestamp } from '@/utils';
+import { Utils } from '@/providers';
 
 @Injectable()
 export class BaseService<T> {
   constructor(private readonly repo: Repository<T>) {}
 
   getTimestamp(date?: string) {
-    return getTimestamp(date);
+    return Utils.getTimestamp(date);
   }
 
   asset(condition, errorMsg = '参数错误') {

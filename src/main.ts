@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import * as compression from 'compression';
-import { isDevelop } from './utils';
-import { setupSwagger } from './swagger';
+import { Utils } from '@/providers';
+import { setupFilters } from '@/filters';
+import { setupSwagger } from '@/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,7 +11,8 @@ async function bootstrap() {
   app.use(compression());
   app.enableCors();
 
-  if (isDevelop()) {
+  setupFilters(app);
+  if (Utils.isDevelop()) {
     setupSwagger(app);
   }
 

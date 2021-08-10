@@ -8,6 +8,9 @@ import { config } from './config';
 // entities
 import { UserEntity } from './modules/user/entities/user.entity';
 
+// providers
+import { Utils } from './providers';
+
 // modules
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -38,6 +41,6 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Utils],
 })
 export class AppModule {}
