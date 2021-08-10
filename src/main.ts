@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import * as compression from 'compression';
 import { Utils } from '@/providers';
 import { setupFilters } from '@/filters';
+import { setupPipes } from '@/pipes';
 import { setupSwagger } from '@/swagger';
 import { AppModule } from './app.module';
 
@@ -12,6 +13,7 @@ async function bootstrap() {
   app.enableCors();
 
   setupFilters(app);
+  setupPipes(app);
   if (Utils.isDevelop()) {
     setupSwagger(app);
   }

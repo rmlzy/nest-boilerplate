@@ -31,7 +31,7 @@ export class UserEntity extends BaseEntity {
    * 电子邮件
    */
   @Column({ length: 256 })
-  mail: string;
+  email: string;
 
   /**
    * 电话
@@ -43,7 +43,7 @@ export class UserEntity extends BaseEntity {
    * 上次登录时间
    */
   @UpdateDateColumn({
-    type: 'timestamp',
+    type: 'datetime',
   })
   loggedAt: Date;
 

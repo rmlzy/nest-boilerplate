@@ -8,6 +8,7 @@ export class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // TODO: 自动更新
   @CreateDateColumn({
     type: 'timestamp',
   })

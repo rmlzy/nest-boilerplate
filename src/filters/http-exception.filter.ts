@@ -15,7 +15,7 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
     const statusCode = exception.getStatus();
 
     const r = {
-      code: statusCode,
+      statusCode,
       message: exception.message,
       timestamp: new Date().toISOString(),
     };
