@@ -1,7 +1,7 @@
 {
   "name": "nest-boilerplate",
   "version": "0.0.1",
-  "description": "基于 Nest、TypeORM、Express 的 API 脚手架",
+  "description": "自用 Nest 脚手架",
   "author": "rmlzy@outlook.com",
   "private": true,
   "license": "MIT",
