@@ -9,8 +9,10 @@ import { HealthModule } from './system/health/health.module';
 import { UserModule } from './system/user/user.module';
 import { UserTokenModule } from './system/user-token/user-token.module';
 import { RoleModule } from './system/role/role.module';
+import { AccessModule } from './system/access/access.module';
 import { ArticleModule } from './demo/article/article.module';
 import { UserArticleModule } from './demo/user-article/user-article.module';
+import { RoleAccessModule } from './system/role-access/role-access.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { UserArticleModule } from './demo/user-article/user-article.module';
     ArticleModule,
     UserArticleModule,
     RoleModule,
+    AccessModule,
+    RoleAccessModule,
   ],
   controllers: [],
   providers: [Utils],

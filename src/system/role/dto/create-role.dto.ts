@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateRoleDto {
@@ -12,4 +18,8 @@ export class CreateRoleDto {
   @IsOptional()
   @MaxLength(100, { message: '角色描述最多包含100个字符' })
   description: string;
+
+  @ApiProperty({ type: [Number], description: '资源ID' })
+  @IsArray({ message: '资源ID必须是数组' })
+  accessIds: number[];
 }
