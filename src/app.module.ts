@@ -5,9 +5,9 @@ import { Utils } from '@/core';
 import { config } from './config';
 
 // modules
-import { AuthModule } from './system/auth/auth.module';
-import { UserModule } from './system/user/user.module';
 import { HealthModule } from './system/health/health.module';
+import { UserModule } from './system/user/user.module';
+import { UserTokenModule } from './system/user-token/user-token.module';
 import { ArticleModule } from './demo/article/article.module';
 import { UserArticleModule } from './demo/user-article/user-article.module';
 
@@ -34,9 +34,9 @@ import { UserArticleModule } from './demo/user-article/user-article.module';
       }),
     }),
 
-    UserModule,
-    AuthModule,
     HealthModule,
+    UserModule,
+    UserTokenModule,
     ArticleModule,
     UserArticleModule,
   ],

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtPayload } from '@/system/auth/auth.interface';
+import { IJwtPayload } from '@/core';
 
 @Injectable()
 export class Utils {

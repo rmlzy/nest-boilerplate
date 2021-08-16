@@ -32,22 +32,22 @@ export class ArticleController extends BaseController {
     @UserId() userId: string,
     @Body() createArticleDto: CreateArticleDto,
   ) {
-    const res = await this.articleService.create(userId, createArticleDto);
-    return this.success(res);
+    const data = await this.articleService.create(userId, createArticleDto);
+    return this.success(data);
   }
 
   @ApiOperation({ description: '查询文章列表' })
   @Get()
   async findAll(@UserId() userId: string) {
-    const res = await this.userArticleService.findArticlesByUserId(userId);
-    return this.success(res);
+    const data = await this.userArticleService.findArticlesByUserId(userId);
+    return this.success(data);
   }
 
   @ApiOperation({ description: '文章详情' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const res = await this.articleService.findOne(id);
-    return this.success(res);
+    const data = await this.articleService.findOne(id);
+    return this.success(data);
   }
 
   @ApiOperation({ description: '更新文章' })
@@ -57,15 +57,15 @@ export class ArticleController extends BaseController {
     @Param('id') id: string,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    const res = await this.articleService.update(id, updateArticleDto);
-    return this.success(res);
+    const data = await this.articleService.update(id, updateArticleDto);
+    return this.success(data);
   }
 
   @ApiOperation({ description: '删除文章' })
   @Delete(':id')
   @Logged()
   async remove(@UserId() userId: string, @Param('id') articleId: string) {
-    const res = await this.articleService.remove(userId, articleId);
-    return this.success(res);
+    const data = await this.articleService.remove(userId, articleId);
+    return this.success(data);
   }
 }

@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from '@/system/user/user.module';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { UserTokenService } from './user-token.service';
+import { UserTokenController } from './user-token.controller';
+import { UserTokenEntity } from './entities/user-token.entity';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
     UserModule,
+    TypeOrmModule.forFeature([UserTokenEntity]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -20,8 +23,8 @@ import { JwtStrategy } from './jwt.strategy';
     }),
     ConfigModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
+  controllers: [UserTokenController],
+  providers: [UserTokenService, JwtStrategy],
+  exports: [UserTokenService],
 })
-export class AuthModule {}
+export class UserTokenModule {}

@@ -1,54 +1,53 @@
+import * as dayjs from 'dayjs';
+import { Repository } from 'typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { BaseService, Utils } from '@/core';
+import { IJwtPayload } from '@/core';
 import { UserService } from '@/system/user/user.service';
 import { LoginDto } from './dto/login.dto';
-import { IJwtPayload } from './auth.interface';
+import { UserTokenEntity } from './entities/user-token.entity';
 
 @Injectable()
-export class AuthService extends BaseService<any> {
+export class UserTokenService {
   constructor(
+    @InjectRepository(UserTokenEntity)
+    private tokenRepo: Repository<UserTokenEntity>,
     private userService: UserService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {
-    super(null);
-  }
+  ) {}
 
   async login(loginDto: LoginDto): Promise<string> {
     const { username, password } = loginDto;
-    // 校验用户密码
-    const valid = await this.userService.verifyPassword(username, password);
+
+    const valid = this.userService.verifyPassword(username, password);
     if (!valid) {
       throw new HttpException('用户名或密码无效', HttpStatus.CONFLICT);
     }
 
-    // 获取用户信息, 存储到 token 中
     const user = await this.userService.findByUsername(username);
     if (!user) {
       throw new HttpException('未检测到用户', HttpStatus.CONFLICT);
     }
 
+    const expireInDay = this.configService.get('TOKEN_EXPIRES_IN_DAY') || 1;
     const payload: IJwtPayload = { id: user.id, username };
     const token = this.jwtService.sign(payload, {
-      expiresIn: this.configService.get('TOKEN_EXPIRES_IN'),
+      expiresIn: `${expireInDay}d`,
     });
-    await this.userService.setToken(user.id, token);
+
+    const expireAt = dayjs().add(expireInDay, 'day');
+    await this.tokenRepo.save({
+      userId: user.id,
+      token,
+      expireAt: expireAt.toISOString(),
+    });
     return token;
   }
 
   async logout(token: string): Promise<void> {
-    const user = await this.userService.findByToken(token);
-    if (!user) {
-      throw new HttpException('未检测到用户', HttpStatus.CONFLICT);
-    }
-    await this.userService.removeToken(user.id);
-  }
-
-  async updatePassword(token: string, newPassword: string): Promise<void> {
-    const { id } = Utils.decodeToken(token);
-    this.asset(id, '未检测到用户');
-    await this.userService.updatePassword(id, newPassword);
+    await this.tokenRepo.delete({ token });
   }
 }

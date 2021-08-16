@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { BaseService, Utils } from '@/core';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { UserRepository } from './entities/user.repository';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity> {
-  constructor(private readonly userRepo: UserRepository) {
+  constructor(
+    @InjectRepository(UserEntity)
+    private userRepo: Repository<UserEntity>,
+  ) {
     super(userRepo);
   }
 
@@ -30,11 +34,6 @@ export class UserService extends BaseService<UserEntity> {
     return this.ensureExist({ id }, '用户不存在');
   }
 
-  async findByToken(token: string): Promise<UserEntity> {
-    this.asset(token, '未检测到认证信息');
-    return this.ensureExist({ token }, '用户不存在');
-  }
-
   async findByUsername(username: string): Promise<void | UserEntity> {
     const user = await this.ensureExist({ username }, '用户不存在');
     return user;
@@ -50,23 +49,5 @@ export class UserService extends BaseService<UserEntity> {
       return false;
     }
     return Utils.validatePassword(password, user.password);
-  }
-
-  async updatePassword(id: string, newPassword: string): Promise<void> {
-    await this.ensureExist({ id }, '用户不存在');
-    await this.userRepo.update({ id }, { password: newPassword });
-  }
-
-  async removeToken(id): Promise<void> {
-    await this.ensureExist({ id }, '用户不存在');
-    await this.userRepo.update({ id }, { token: '' });
-  }
-
-  async setToken(id: string, token: string): Promise<void> {
-    await this.ensureExist({ id }, '用户不存在');
-    await this.userRepo.update(
-      { id },
-      { token, loggedAt: new Date().toISOString() },
-    );
   }
 }
