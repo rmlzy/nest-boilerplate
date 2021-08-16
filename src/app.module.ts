@@ -8,6 +8,7 @@ import { config } from './config';
 import { HealthModule } from './system/health/health.module';
 import { UserModule } from './system/user/user.module';
 import { UserTokenModule } from './system/user-token/user-token.module';
+import { RoleModule } from './system/role/role.module';
 import { ArticleModule } from './demo/article/article.module';
 import { UserArticleModule } from './demo/user-article/user-article.module';
 
@@ -39,6 +40,7 @@ import { UserArticleModule } from './demo/user-article/user-article.module';
     UserTokenModule,
     ArticleModule,
     UserArticleModule,
+    RoleModule,
   ],
   controllers: [],
   providers: [Utils],
