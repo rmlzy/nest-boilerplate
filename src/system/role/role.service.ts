@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from '@/core';
 import { AccessService } from '@/system/access/access.service';
+import { RoleAccessService } from '@/system/role-access/role-access.service';
 import { RoleAccessEntity } from '@/system/role-access/entities/role-access.entity';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -13,6 +14,7 @@ export class RoleService extends BaseService<RoleEntity> {
   constructor(
     @InjectRepository(RoleEntity) private roleRepo: Repository<RoleEntity>,
     private accessService: AccessService,
+    private roleAccessService: RoleAccessService,
   ) {
     super(roleRepo);
   }
@@ -43,7 +45,10 @@ export class RoleService extends BaseService<RoleEntity> {
   }
 
   async findOne(id: number): Promise<RoleEntity> {
-    return this.ensureExist({ id }, '角色不存在');
+    const role = await this.ensureExist({ id }, '角色不存在');
+    const accessList = await this.roleAccessService.findAccessByRoleId(id);
+    role['accessList'] = accessList;
+    return role;
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto): Promise<void> {

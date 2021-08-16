@@ -20,6 +20,12 @@ export class AccessService extends BaseService<AccessEntity> {
     return rows.map((item) => item.id);
   }
 
+  async findByIds(accessIds: number[]): Promise<AccessEntity[]> {
+    return this.accessRepo.findByIds(accessIds, {
+      select: ['id', 'name', 'type', 'sort', 'description'],
+    });
+  }
+
   async create(createAccessDto: CreateAccessDto): Promise<AccessEntity> {
     const { name } = createAccessDto;
     await this.ensureNotExist({ name }, '资源名已存在');
