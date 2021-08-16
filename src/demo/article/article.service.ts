@@ -18,7 +18,7 @@ export class ArticleService extends BaseService<ArticleEntity> {
   }
 
   async create(
-    userId: string,
+    userId: number,
     createArticleDto: CreateArticleDto,
   ): Promise<ArticleEntity> {
     const { title } = createArticleDto;
@@ -33,18 +33,18 @@ export class ArticleService extends BaseService<ArticleEntity> {
     return createdArticle;
   }
 
-  async findOne(id: string): Promise<ArticleEntity> {
+  async findOne(id: number): Promise<ArticleEntity> {
     return this.ensureExist({ id }, '文章不存在');
   }
 
-  async update(id: string, updateArticleDto: UpdateArticleDto): Promise<void> {
+  async update(id: number, updateArticleDto: UpdateArticleDto): Promise<void> {
     const { title } = updateArticleDto;
     await this.ensureExist({ id }, '文章不存在');
     await this.ensureNotExist({ title, id: Not(id) }, '文章标题已存在');
     await this.articleRepo.update({ id }, updateArticleDto);
   }
 
-  async remove(userId: string, articleId: string): Promise<void> {
+  async remove(userId: number, articleId: number): Promise<void> {
     const exist = await this.userArticleService.exist(userId, articleId);
     this.asset(exist, '文章不存在');
     await getConnection().transaction(async (manager) => {

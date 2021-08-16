@@ -28,7 +28,7 @@ export class UserController extends BaseController {
   @ApiOperation({ description: '查询用户' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const data = await this.userService.findOne(id);
+    const data = await this.userService.findOne(+id);
     return this.success(data);
   }
 }

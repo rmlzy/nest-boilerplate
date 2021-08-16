@@ -15,7 +15,7 @@ export class UserArticleService extends BaseService<UserArticleEntity> {
 
   async findUserByArticleId(articleId: string) {}
 
-  async exist(userId: string, articleId: string): Promise<boolean> {
+  async exist(userId: number, articleId: number): Promise<boolean> {
     const count = await this.userArticleRepo.count({
       where: { userId, articleId },
     });

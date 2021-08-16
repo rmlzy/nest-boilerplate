@@ -37,21 +37,21 @@ export class RoleController extends BaseController {
   @ApiOperation({ description: '角色详情' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const data = await this.roleService.findOne(id);
+    const data = await this.roleService.findOne(+id);
     return this.success(data);
   }
 
   @ApiOperation({ description: '更新角色' })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    const data = await this.roleService.update(id, updateRoleDto);
+    const data = await this.roleService.update(+id, updateRoleDto);
     return this.success(data);
   }
 
   @ApiOperation({ description: '删除角色' })
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const data = await this.roleService.remove(id);
+    const data = await this.roleService.remove(+id);
     return this.success(data);
   }
 }

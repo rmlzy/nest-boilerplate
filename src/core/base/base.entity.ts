@@ -5,8 +5,8 @@ import {
 } from 'typeorm';
 
 export class BaseEntity {
-  @PrimaryGeneratedColumn('uuid', { comment: '唯一ID' })
-  id: string;
+  @PrimaryGeneratedColumn({ comment: 'ID' })
+  id: number;
 
   @CreateDateColumn({ comment: '创建时间' })
   createdAt: Date;

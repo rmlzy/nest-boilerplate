@@ -30,7 +30,7 @@ export class UserService extends BaseService<UserEntity> {
     return this.userRepo.find();
   }
 
-  async findOne(id: string): Promise<UserEntity> {
+  async findOne(id: number): Promise<UserEntity> {
     return this.ensureExist({ id }, '用户不存在');
   }
 

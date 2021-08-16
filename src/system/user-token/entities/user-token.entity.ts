@@ -4,7 +4,7 @@ import { BaseEntity } from '@/core';
 @Entity('sys_user_token')
 export class UserTokenEntity extends BaseEntity {
   @Column({ comment: '用户ID' })
-  userId: string;
+  userId: number;
 
   @Column({ type: 'varchar', length: 100, comment: 'TOKEN' })
   token: string;

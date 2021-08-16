@@ -24,16 +24,19 @@ export class RoleService extends BaseService<RoleEntity> {
     return this.roleRepo.find();
   }
 
-  async findOne(id: string): Promise<RoleEntity> {
+  async findOne(id: number): Promise<RoleEntity> {
+    console.log(id);
+    const role = await this.roleRepo.findOne({ where: { id } });
+    console.log(role);
     return this.ensureExist({ id }, '角色不存在');
   }
 
-  async update(id: string, updateRoleDto: UpdateRoleDto): Promise<void> {
+  async update(id: number, updateRoleDto: UpdateRoleDto): Promise<void> {
     await this.ensureExist({ id }, '角色不存在');
     await this.roleRepo.update({ id }, updateRoleDto);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     await this.ensureExist({ id }, '角色不存在');
     await this.roleRepo.delete({ id });
   }

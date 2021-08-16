@@ -32,7 +32,7 @@ export class ArticleController extends BaseController {
     @UserId() userId: string,
     @Body() createArticleDto: CreateArticleDto,
   ) {
-    const data = await this.articleService.create(userId, createArticleDto);
+    const data = await this.articleService.create(+userId, createArticleDto);
     return this.success(data);
   }
 
@@ -46,7 +46,7 @@ export class ArticleController extends BaseController {
   @ApiOperation({ description: '文章详情' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const data = await this.articleService.findOne(id);
+    const data = await this.articleService.findOne(+id);
     return this.success(data);
   }
 
@@ -57,15 +57,15 @@ export class ArticleController extends BaseController {
     @Param('id') id: string,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    const data = await this.articleService.update(id, updateArticleDto);
+    const data = await this.articleService.update(+id, updateArticleDto);
     return this.success(data);
   }
 
   @ApiOperation({ description: '删除文章' })
   @Delete(':id')
   @Logged()
-  async remove(@UserId() userId: string, @Param('id') articleId: string) {
-    const data = await this.articleService.remove(userId, articleId);
+  async remove(@UserId() userId: string, @Param('id') articleId: number) {
+    const data = await this.articleService.remove(+userId, articleId);
     return this.success(data);
   }
 }
