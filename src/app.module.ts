@@ -23,7 +23,7 @@ import { UserModule } from '~/system/user/user.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        logging: true,
+        logging: Utils.isDevelop() ? true : ['error'],
         type: 'mysql',
         host: config.get('MYSQL.HOST'),
         port: config.get('MYSQL.PORT'),

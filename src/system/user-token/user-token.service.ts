@@ -22,7 +22,7 @@ export class UserTokenService {
   async login(loginDto: LoginDto): Promise<string> {
     const { username, password } = loginDto;
 
-    const valid = this.userService.verifyPassword(username, password);
+    const valid = await this.userService.verifyPassword(username, password);
     if (!valid) {
       throw new HttpException('用户名或密码无效', HttpStatus.CONFLICT);
     }

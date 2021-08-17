@@ -35,12 +35,15 @@ export class UserService extends BaseService<UserEntity> {
   }
 
   async findByUsername(username: string): Promise<void | UserEntity> {
-    const user = await this.ensureExist({ username }, '用户不存在');
-    return user;
+    return this.ensureExist({ username }, '用户不存在');
   }
 
   async verifyPassword(username: string, password: string): Promise<boolean> {
-    const user = await this.userRepo.createQueryBuilder().where({ username }).addSelect('UserEntity.password').getOne();
+    const user = await this.userRepo
+      .createQueryBuilder('user')
+      .where({ username })
+      .addSelect('user.password')
+      .execute();
     if (!user) {
       return false;
     }
