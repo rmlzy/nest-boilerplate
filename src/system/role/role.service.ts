@@ -1,6 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getConnection, Repository } from 'typeorm';
+import { EntityManager, Repository, Transaction, TransactionManager } from 'typeorm';
 import { BaseService } from '~/core';
 import { AccessService } from '~/system/access/access.service';
 import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
@@ -19,22 +19,20 @@ export class RoleService extends BaseService<RoleEntity> {
     super(roleRepo);
   }
 
-  async create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
+  @Transaction()
+  async create(createRoleDto: CreateRoleDto, @TransactionManager() manager: EntityManager = null): Promise<RoleEntity> {
     const { name, accessIds } = createRoleDto;
     await this.ensureNotExist({ name }, '角色名已存在');
-    const availableAccessIds = await this.accessService.getAvailableAccessIds(accessIds);
-    if (availableAccessIds.length === 0) {
-      throw new HttpException('未检测到可用的 accessId', HttpStatus.CONFLICT);
-    }
-    let createdRole;
-    await getConnection().transaction(async (manager) => {
-      createdRole = await manager.save(RoleEntity, createRoleDto);
-      const entities = availableAccessIds.map((accessId) => ({
-        accessId,
-        roleId: createdRole.id,
-      }));
-      await manager.save(RoleAccessEntity, entities);
-    });
+
+    const _accessIds = await this.accessService.getValidIds(accessIds);
+    await this.asset(_accessIds.length, '未检测到可用的 accessId');
+
+    const createdRole = await manager.save(RoleEntity, createRoleDto);
+    const roleAccessEntities = _accessIds.map((accessId) => ({
+      accessId,
+      roleId: createdRole.id,
+    }));
+    await manager.save(RoleAccessEntity, roleAccessEntities);
     return createdRole;
   }
 

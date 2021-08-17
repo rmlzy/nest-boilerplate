@@ -10,23 +10,23 @@ export class BaseService<T> {
     return Utils.getTimestamp(date);
   }
 
-  asset(condition, errorMsg = '参数错误') {
+  asset(condition, invalidMsg = '参数错误') {
     if (!condition) {
-      throw new HttpException(errorMsg, HttpStatus.CONFLICT);
+      throw new HttpException(invalidMsg, HttpStatus.CONFLICT);
     }
   }
 
-  async ensureNotExist(where, errorMsg = '资源已存在') {
+  async ensureNotExist(where, invalidMsg = '资源已存在') {
     const existed = await this.repo.count({ where });
     if (existed > 0) {
-      throw new HttpException(errorMsg, HttpStatus.CONFLICT);
+      throw new HttpException(invalidMsg, HttpStatus.CONFLICT);
     }
   }
 
-  async ensureExist(where, errorMsg = '资源不存在') {
+  async ensureExist(where, invalidMsg = '资源不存在') {
     const existed = await this.repo.findOne({ where });
     if (!existed) {
-      throw new HttpException(errorMsg, HttpStatus.CONFLICT);
+      throw new HttpException(invalidMsg, HttpStatus.CONFLICT);
     }
     return existed;
   }

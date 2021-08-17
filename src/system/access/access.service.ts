@@ -15,7 +15,7 @@ export class AccessService extends BaseService<AccessEntity> {
     super(accessRepo);
   }
 
-  async getAvailableAccessIds(accessIds: number[]): Promise<number[]> {
+  async getValidIds(accessIds: number[]): Promise<number[]> {
     const rows = await this.accessRepo.find({ where: { id: In(accessIds) } });
     return rows.map((item) => item.id);
   }

@@ -1,9 +1,10 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { BaseEntity } from '~/core';
 
 @Entity({ name: 'sys_user' })
 export class UserEntity extends BaseEntity {
   @Column({ length: 15, comment: '登录账号' })
+  @Index({ unique: true })
   username: string;
 
   @Column({ length: 64, select: false, comment: '密码' })
@@ -13,5 +14,6 @@ export class UserEntity extends BaseEntity {
   realname: string;
 
   @Column({ length: 200, comment: '电子邮件' })
+  @Index({ unique: true })
   email: string;
 }
