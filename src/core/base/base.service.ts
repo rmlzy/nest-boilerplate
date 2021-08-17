@@ -1,6 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Utils } from '~/core';
+
+interface BaseEntity {
+  id: number;
+}
 
 @Injectable()
 export class BaseService<T> {
@@ -29,5 +33,10 @@ export class BaseService<T> {
       throw new HttpException(invalidMsg, HttpStatus.NOT_FOUND);
     }
     return existed;
+  }
+
+  async getValidIds(ids: number[]): Promise<number[]> {
+    const rows = await this.repo.find({ where: { id: In(ids) } });
+    return rows.map((item) => item['id']).filter(Boolean);
   }
 }

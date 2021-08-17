@@ -11,6 +11,7 @@ import { RoleAccessModule } from '~/system/role-access/role-access.module';
 import { RoleModule } from '~/system/role/role.module';
 import { UserTokenModule } from '~/system/user-token/user-token.module';
 import { UserModule } from '~/system/user/user.module';
+import { UserRoleModule } from './system/user-role/user-role.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { UserModule } from '~/system/user/user.module';
     RoleModule,
     AccessModule,
     RoleAccessModule,
+    UserRoleModule,
   ],
   controllers: [],
   providers: [Utils],

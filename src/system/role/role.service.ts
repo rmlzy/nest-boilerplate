@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
-import { EntityManager, Repository, Transaction, TransactionManager } from 'typeorm';
+import {
+  EntityManager,
+  Repository,
+  Transaction,
+  TransactionManager,
+} from 'typeorm';
 import { BaseService } from '~/core';
 import { AccessService } from '~/system/access/access.service';
 import { AccessEntity } from '~/system/access/entities/access.entity';
@@ -21,7 +26,10 @@ export class RoleService extends BaseService<RoleEntity> {
   }
 
   @Transaction()
-  async create(createRoleDto: CreateRoleDto, @TransactionManager() manager: EntityManager = null): Promise<RoleEntity> {
+  async create(
+    createRoleDto: CreateRoleDto,
+    @TransactionManager() manager: EntityManager = null,
+  ): Promise<RoleEntity> {
     const { name, accessIds } = createRoleDto;
     await this.ensureNotExist({ name }, '角色名已存在');
 
@@ -45,8 +53,16 @@ export class RoleService extends BaseService<RoleEntity> {
     const role = (await this.ensureExist({ id }, '角色不存在')) as RoleVo;
     role.accesses = await this.roleRepo
       .createQueryBuilder('role')
-      .leftJoinAndSelect(RoleAccessEntity, 'roleAccess', 'roleAccess.roleId = role.id')
-      .leftJoinAndSelect(AccessEntity, 'access', 'roleAccess.accessId = access.id')
+      .leftJoinAndSelect(
+        RoleAccessEntity,
+        'roleAccess',
+        'roleAccess.roleId = role.id',
+      )
+      .leftJoinAndSelect(
+        AccessEntity,
+        'access',
+        'roleAccess.accessId = access.id',
+      )
       .select(`access.id, access.name`)
       .where('role.id = :id', { id })
       .printSql()
@@ -71,11 +87,18 @@ export class RoleService extends BaseService<RoleEntity> {
       }));
       await manager.save(RoleAccessEntity, roleAccessEntities);
     }
-    await manager.update(RoleEntity, { id }, _.omit(updateRoleDto, ['accessIds']));
+    await manager.update(
+      RoleEntity,
+      { id },
+      _.omit(updateRoleDto, ['accessIds']),
+    );
   }
 
   @Transaction()
-  async remove(id: number, @TransactionManager() manager: EntityManager = null): Promise<void> {
+  async remove(
+    id: number,
+    @TransactionManager() manager: EntityManager = null,
+  ): Promise<void> {
     await this.ensureExist({ id }, '角色不存在');
     await manager.delete(RoleEntity, { id });
     await manager.delete(RoleAccessEntity, { roleId: id });

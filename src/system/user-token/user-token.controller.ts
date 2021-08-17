@@ -1,13 +1,17 @@
 import { Body, Controller, Headers, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController } from '~/core';
+import { BaseController, UserId } from '~/core';
+import { UserService } from '~/system/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { UserTokenService } from './user-token.service';
 
 @ApiTags('授权')
 @Controller('')
 export class UserTokenController extends BaseController {
-  constructor(private readonly tokenService: UserTokenService) {
+  constructor(
+    private tokenService: UserTokenService,
+    private userService: UserService,
+  ) {
     super();
   }
 
@@ -22,6 +26,12 @@ export class UserTokenController extends BaseController {
   @Post('/logout')
   async logout(@Headers('token') token) {
     const data = await this.tokenService.logout(token);
+    return this.success(data);
+  }
+
+  @ApiOperation({ description: '用户信息' })
+  async profile(@UserId() id: number) {
+    const data = await this.userService.profile(id);
     return this.success(data);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { BaseService } from '~/core';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
@@ -13,11 +13,6 @@ export class AccessService extends BaseService<AccessEntity> {
     private accessRepo: Repository<AccessEntity>,
   ) {
     super(accessRepo);
-  }
-
-  async getValidIds(accessIds: number[]): Promise<number[]> {
-    const rows = await this.accessRepo.find({ where: { id: In(accessIds) } });
-    return rows.map((item) => item.id);
   }
 
   async create(createAccessDto: CreateAccessDto): Promise<AccessEntity> {

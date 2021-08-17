@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '~/core';
 import { AccessService } from './access.service';
@@ -35,7 +43,10 @@ export class AccessController extends BaseController {
 
   @ApiOperation({ description: '修改资源' })
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateAccessDto: UpdateAccessDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateAccessDto: UpdateAccessDto,
+  ) {
     const data = await this.accessService.update(+id, updateAccessDto);
     return this.success(data);
   }

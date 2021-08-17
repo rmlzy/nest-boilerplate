@@ -17,13 +17,18 @@ export class ArticleService extends BaseService<ArticleEntity> {
     super(articleRepo);
   }
 
-  async create(userId: number, createArticleDto: CreateArticleDto): Promise<ArticleEntity> {
+  async create(
+    userId: number,
+    createArticleDto: CreateArticleDto,
+  ): Promise<ArticleEntity> {
     const { title } = createArticleDto;
     await this.ensureNotExist({ title }, '文章标题已存在');
     let createdArticle;
     await getConnection().transaction(async (manager) => {
       createdArticle = await manager.save(ArticleEntity, createArticleDto);
-      await manager.save(UserArticleEntity, [{ userId, articleId: createdArticle.id }]);
+      await manager.save(UserArticleEntity, [
+        { userId, articleId: createdArticle.id },
+      ]);
     });
     return createdArticle;
   }

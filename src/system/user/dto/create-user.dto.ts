@@ -1,5 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: '用户名' })
@@ -25,4 +32,8 @@ export class CreateUserDto {
   @IsEmail({}, { message: '电子邮箱格式错误' })
   @MaxLength(256, { message: '电子邮箱最多包含256个字符' })
   email: string;
+
+  @ApiProperty({ type: [Number], description: '角色ID' })
+  @IsArray({ message: '角色ID必须是数组' })
+  roleIds: number[];
 }
