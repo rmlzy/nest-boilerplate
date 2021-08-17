@@ -1,5 +1,5 @@
-import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateArticleDto {
   @ApiProperty({ description: '标题' })

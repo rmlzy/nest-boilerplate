@@ -1,11 +1,5 @@
-import {
-  IsArray,
-  IsNotEmpty,
-  IsOptional,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsArray, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 
 export class CreateRoleDto {
   @ApiProperty({ description: '角色名称' })

@@ -1,10 +1,10 @@
-import { getConnection, Repository } from 'typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from '@/core';
-import { AccessService } from '@/system/access/access.service';
-import { RoleAccessService } from '@/system/role-access/role-access.service';
-import { RoleAccessEntity } from '@/system/role-access/entities/role-access.entity';
+import { getConnection, Repository } from 'typeorm';
+import { BaseService } from '~/core';
+import { AccessService } from '~/system/access/access.service';
+import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
+import { RoleAccessService } from '~/system/role-access/role-access.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleEntity } from './entities/role.entity';
@@ -22,9 +22,7 @@ export class RoleService extends BaseService<RoleEntity> {
   async create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
     const { name, accessIds } = createRoleDto;
     await this.ensureNotExist({ name }, '角色名已存在');
-    const availableAccessIds = await this.accessService.getAvailableAccessIds(
-      accessIds,
-    );
+    const availableAccessIds = await this.accessService.getAvailableAccessIds(accessIds);
     if (availableAccessIds.length === 0) {
       throw new HttpException('未检测到可用的 accessId', HttpStatus.CONFLICT);
     }

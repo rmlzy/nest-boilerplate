@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseService, Utils } from '@/core';
+import { BaseService, Utils } from '~/core';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 
@@ -40,11 +40,7 @@ export class UserService extends BaseService<UserEntity> {
   }
 
   async verifyPassword(username: string, password: string): Promise<boolean> {
-    const user = await this.userRepo
-      .createQueryBuilder()
-      .where({ username })
-      .addSelect('UserEntity.password')
-      .getOne();
+    const user = await this.userRepo.createQueryBuilder().where({ username }).addSelect('UserEntity.password').getOne();
     if (!user) {
       return false;
     }

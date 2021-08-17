@@ -1,6 +1,6 @@
-import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Utils } from '@/core';
+import { Utils } from '~/core';
 
 @Injectable()
 export class BaseService<T> {

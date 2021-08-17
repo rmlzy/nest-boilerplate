@@ -1,7 +1,7 @@
-import { In, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from '@/core';
+import { In, Repository } from 'typeorm';
+import { BaseService } from '~/core';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
 import { AccessEntity } from './entities/access.entity';

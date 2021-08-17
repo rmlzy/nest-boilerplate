@@ -1,9 +1,9 @@
-import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from '@/core';
-import { AccessService } from '@/system/access/access.service';
-import { AccessEntity } from '@/system/access/entities/access.entity';
+import { Repository } from 'typeorm';
+import { BaseService } from '~/core';
+import { AccessService } from '~/system/access/access.service';
+import { AccessEntity } from '~/system/access/entities/access.entity';
 import { RoleAccessEntity } from './entities/role-access.entity';
 
 @Injectable()

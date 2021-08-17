@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Utils } from '@/core';
-import { config } from './config';
-
-// modules
-import { HealthModule } from './system/health/health.module';
-import { UserModule } from './system/user/user.module';
-import { UserTokenModule } from './system/user-token/user-token.module';
-import { RoleModule } from './system/role/role.module';
-import { AccessModule } from './system/access/access.module';
-import { ArticleModule } from './demo/article/article.module';
-import { UserArticleModule } from './demo/user-article/user-article.module';
-import { RoleAccessModule } from './system/role-access/role-access.module';
+import { config } from '~/config';
+import { Utils } from '~/core';
+import { ArticleModule } from '~/demo/article/article.module';
+import { UserArticleModule } from '~/demo/user-article/user-article.module';
+import { AccessModule } from '~/system/access/access.module';
+import { HealthModule } from '~/system/health/health.module';
+import { RoleAccessModule } from '~/system/role-access/role-access.module';
+import { RoleModule } from '~/system/role/role.module';
+import { UserTokenModule } from '~/system/user-token/user-token.module';
+import { UserModule } from '~/system/user/user.module';
 
 @Module({
   imports: [

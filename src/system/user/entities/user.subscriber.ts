@@ -1,10 +1,6 @@
-import type {
-  EntitySubscriberInterface,
-  InsertEvent,
-  UpdateEvent,
-} from 'typeorm';
+import type { EntitySubscriberInterface, InsertEvent, UpdateEvent } from 'typeorm';
 import { EventSubscriber } from 'typeorm';
-import { Utils } from '@/core';
+import { Utils } from '~/core';
 import { UserEntity } from './user.entity';
 
 @EventSubscriber()
@@ -15,20 +11,13 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
 
   beforeInsert(event: InsertEvent<UserEntity>): void {
     if (event.entity.password) {
-      event.entity.password = Utils.generateHashedPassword(
-        event.entity.password,
-      );
+      event.entity.password = Utils.generateHashedPassword(event.entity.password);
     }
   }
 
   beforeUpdate(event: UpdateEvent<UserEntity>): void {
-    if (
-      event.entity.password &&
-      event.entity.password !== event.databaseEntity.password
-    ) {
-      event.entity.password = Utils.generateHashedPassword(
-        event.entity.password,
-      );
+    if (event.entity.password && event.entity.password !== event.databaseEntity.password) {
+      event.entity.password = Utils.generateHashedPassword(event.entity.password);
     }
   }
 }

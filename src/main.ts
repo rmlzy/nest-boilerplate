@@ -1,7 +1,7 @@
-import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 import * as compression from 'compression';
-import { Utils, setupFilters, setupPipes, setupSwagger } from '@/core';
+import { setupFilters, setupPipes, setupSwagger, Utils } from '~/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

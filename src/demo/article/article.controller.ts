@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController, Logged, UserId } from '@/core';
-import { UserArticleService } from '@/demo/user-article/user-article.service';
+import { BaseController, Logged, UserId } from '~/core';
+import { UserArticleService } from '~/demo/user-article/user-article.service';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -28,10 +20,7 @@ export class ArticleController extends BaseController {
   @ApiOperation({ description: '创建文章' })
   @Post()
   @Logged()
-  async create(
-    @UserId() userId: string,
-    @Body() createArticleDto: CreateArticleDto,
-  ) {
+  async create(@UserId() userId: string, @Body() createArticleDto: CreateArticleDto) {
     const data = await this.articleService.create(+userId, createArticleDto);
     return this.success(data);
   }
@@ -53,10 +42,7 @@ export class ArticleController extends BaseController {
   @ApiOperation({ description: '更新文章' })
   @Patch(':id')
   @Logged()
-  async update(
-    @Param('id') id: string,
-    @Body() updateArticleDto: UpdateArticleDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
     const data = await this.articleService.update(+id, updateArticleDto);
     return this.success(data);
   }

@@ -1,11 +1,5 @@
-import {
-  IsNotEmpty,
-  MinLength,
-  MaxLength,
-  IsOptional,
-  IsEmail,
-} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: '用户名' })

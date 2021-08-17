@@ -1,6 +1,6 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { LoggedGuard } from '@/core';
+import { LoggedGuard } from '~/core';
 
 export const Logged = () => {
   return applyDecorators(

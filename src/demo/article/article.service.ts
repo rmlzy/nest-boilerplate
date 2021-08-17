@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Not, getConnection } from 'typeorm';
-import { BaseService } from '@/core';
-import { UserArticleService } from '@/demo/user-article/user-article.service';
-import { UserArticleEntity } from '@/demo/user-article/entities/user-article.entity';
+import { getConnection, Not } from 'typeorm';
+import { BaseService } from '~/core';
+import { UserArticleEntity } from '~/demo/user-article/entities/user-article.entity';
+import { UserArticleService } from '~/demo/user-article/user-article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { ArticleEntity } from './entities/article.entity';
@@ -17,18 +17,13 @@ export class ArticleService extends BaseService<ArticleEntity> {
     super(articleRepo);
   }
 
-  async create(
-    userId: number,
-    createArticleDto: CreateArticleDto,
-  ): Promise<ArticleEntity> {
+  async create(userId: number, createArticleDto: CreateArticleDto): Promise<ArticleEntity> {
     const { title } = createArticleDto;
     await this.ensureNotExist({ title }, '文章标题已存在');
     let createdArticle;
     await getConnection().transaction(async (manager) => {
       createdArticle = await manager.save(ArticleEntity, createArticleDto);
-      await manager.save(UserArticleEntity, [
-        { userId, articleId: createdArticle.id },
-      ]);
+      await manager.save(UserArticleEntity, [{ userId, articleId: createdArticle.id }]);
     });
     return createdArticle;
   }

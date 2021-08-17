@@ -1,8 +1,8 @@
-import { Controller, Post, Body, Headers } from '@nestjs/common';
+import { Body, Controller, Headers, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController } from '@/core';
-import { UserTokenService } from './user-token.service';
+import { BaseController } from '~/core';
 import { LoginDto } from './dto/login.dto';
+import { UserTokenService } from './user-token.service';
 
 @ApiTags('授权')
 @Controller('')

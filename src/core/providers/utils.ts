@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import dayjs from 'dayjs';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtPayload } from '@/core';
+import * as bcrypt from 'bcrypt';
+import dayjs from 'dayjs';
+import { IJwtPayload } from '~/core';
 
 @Injectable()
 export class Utils {

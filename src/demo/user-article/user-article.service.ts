@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from '@/core';
+import { BaseService } from '~/core';
 import { UserArticleEntity } from './entities/user-article.entity';
 import { UserArticleRepository } from './entities/user-article.repository';
 

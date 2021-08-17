@@ -1,5 +1,5 @@
-import { Entity, Column, Index } from 'typeorm';
-import { BaseEntity } from '@/core';
+import { Column, Entity, Index } from 'typeorm';
+import { BaseEntity } from '~/core';
 
 @Entity('sys_role')
 export class RoleEntity extends BaseEntity {

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserArticleService } from './user-article.service';
 import { UserArticleRepository } from './entities/user-article.repository';
+import { UserArticleService } from './user-article.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserArticleRepository])],

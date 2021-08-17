@@ -1,13 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { BaseController } from '@/core';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { BaseController } from '~/core';
 import { AccessService } from './access.service';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
@@ -37,10 +29,7 @@ export class AccessController extends BaseController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateAccessDto: UpdateAccessDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateAccessDto: UpdateAccessDto) {
     const data = await this.accessService.update(+id, updateAccessDto);
     return this.success(data);
   }

@@ -1,11 +1,11 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { IJwtPayload } from '@/core';
-import { UserService } from '@/system/user/user.service';
+import { IJwtPayload } from '~/core';
+import { UserService } from '~/system/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { UserTokenEntity } from './entities/user-token.entity';
 
