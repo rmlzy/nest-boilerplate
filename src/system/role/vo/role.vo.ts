@@ -1,18 +1,10 @@
-class AccessVo {
+import { RoleEntity } from '../entities/role.entity';
+
+export class AccessVo {
   id: number;
   name: string;
 }
 
-export class RoleVo {
-  id: number;
-
-  name: string;
-
-  description: string;
-
-  accessList: AccessVo[];
-
-  createdAt: Date;
-
-  updatedAt: Date;
+export class RoleVo extends RoleEntity {
+  accesses: AccessVo[];
 }

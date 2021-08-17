@@ -3,18 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository, Transaction, TransactionManager } from 'typeorm';
 import { BaseService } from '~/core';
 import { AccessService } from '~/system/access/access.service';
+import { AccessEntity } from '~/system/access/entities/access.entity';
 import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
-import { RoleAccessService } from '~/system/role-access/role-access.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleEntity } from './entities/role.entity';
+import { RoleVo } from './vo/role.vo';
 
 @Injectable()
 export class RoleService extends BaseService<RoleEntity> {
   constructor(
     @InjectRepository(RoleEntity) private roleRepo: Repository<RoleEntity>,
     private accessService: AccessService,
-    private roleAccessService: RoleAccessService,
   ) {
     super(roleRepo);
   }
@@ -40,10 +40,16 @@ export class RoleService extends BaseService<RoleEntity> {
     return this.roleRepo.find();
   }
 
-  async findOne(id: number): Promise<RoleEntity> {
-    const role = await this.ensureExist({ id }, '角色不存在');
-    const accessList = await this.roleAccessService.findAccessByRoleId(id);
-    role['accessList'] = accessList;
+  async findOne(id: number): Promise<RoleVo> {
+    const role = (await this.ensureExist({ id }, '角色不存在')) as RoleVo;
+    role.accesses = await this.roleRepo
+      .createQueryBuilder('role')
+      .leftJoinAndSelect(RoleAccessEntity, 'roleAccess', 'roleAccess.roleId = role.id')
+      .leftJoinAndSelect(AccessEntity, 'access', 'roleAccess.accessId = access.id')
+      .select(`access.id, access.name`)
+      .where('role.id = :id', { id })
+      .printSql()
+      .execute();
     return role;
   }
 
