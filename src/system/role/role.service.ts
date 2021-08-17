@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as _ from 'lodash';
 import { EntityManager, Repository, Transaction, TransactionManager } from 'typeorm';
 import { BaseService } from '~/core';
 import { AccessService } from '~/system/access/access.service';
@@ -53,13 +54,30 @@ export class RoleService extends BaseService<RoleEntity> {
     return role;
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto): Promise<void> {
+  @Transaction()
+  async update(
+    id: number,
+    updateRoleDto: UpdateRoleDto,
+    @TransactionManager() manager: EntityManager = null,
+  ): Promise<void> {
     await this.ensureExist({ id }, '角色不存在');
-    await this.roleRepo.update({ id }, updateRoleDto);
+    const { accessIds = [] } = updateRoleDto;
+    if (accessIds.length) {
+      const _accessIds = await this.accessService.getValidIds(accessIds);
+      await manager.delete(RoleAccessEntity, { roleId: id });
+      const roleAccessEntities = _accessIds.map((accessId) => ({
+        accessId,
+        roleId: id,
+      }));
+      await manager.save(RoleAccessEntity, roleAccessEntities);
+    }
+    await manager.update(RoleEntity, { id }, _.omit(updateRoleDto, ['accessIds']));
   }
 
-  async remove(id: number): Promise<void> {
+  @Transaction()
+  async remove(id: number, @TransactionManager() manager: EntityManager = null): Promise<void> {
     await this.ensureExist({ id }, '角色不存在');
-    await this.roleRepo.delete({ id });
+    await manager.delete(RoleEntity, { id });
+    await manager.delete(RoleAccessEntity, { roleId: id });
   }
 }
