@@ -16,7 +16,7 @@ export class HealthController {
   ) {}
 
   @ApiOperation({ description: '健康检查' })
-  @Get('health')
+  @Get('/')
   @HealthCheck()
   async health(): Promise<HealthCheckResult> {
     return this.healthCheckService.check([

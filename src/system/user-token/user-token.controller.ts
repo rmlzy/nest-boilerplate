@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController, UserId } from '~/core';
 import { UserService } from '~/system/user/user.service';
@@ -30,6 +30,7 @@ export class UserTokenController extends BaseController {
   }
 
   @ApiOperation({ description: '用户信息' })
+  @Get('/profile')
   async profile(@UserId() id: number) {
     const data = await this.userService.profile(id);
     return this.success(data);

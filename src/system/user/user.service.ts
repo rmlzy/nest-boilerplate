@@ -79,7 +79,7 @@ export class UserService extends BaseService<UserEntity> {
       .createQueryBuilder('user')
       .where({ username })
       .addSelect('user.password')
-      .execute();
+      .getOne();
     if (!user) {
       return false;
     }
