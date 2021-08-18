@@ -10,11 +10,10 @@ import { BaseService, Utils } from '~/core';
 import { RoleEntity } from '~/system/role/entities/role.entity';
 import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/entities/user-role.entity';
-import { UserDetailVo } from '~/system/user/vo/user-detail.vo';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserVo } from './vo/create-user.vo';
-import { UserProfileVo } from './vo/user-profile.vo';
+import { UserProfileVo, UserVo } from './vo/user.vo';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity> {
@@ -53,10 +52,10 @@ export class UserService extends BaseService<UserEntity> {
     return users.map((user) => user.toVo(UserProfileVo));
   }
 
-  async findOne(id: number): Promise<UserDetailVo> {
+  async findOne(id: number): Promise<UserVo> {
     // TODO: 查询用户的 accessIds
     const user = await this.ensureExist({ id }, '用户不存在');
-    const vo = user.toVo(UserDetailVo);
+    const vo = user.toVo(UserVo);
     vo.roles = await this.userRepo
       .createQueryBuilder('user')
       .leftJoinAndSelect(

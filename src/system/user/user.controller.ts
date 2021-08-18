@@ -1,11 +1,10 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '~/core';
-import { UserDetailVo } from '~/system/user/vo/user-detail.vo';
-import { UserProfileVo } from '~/system/user/vo/user-profile.vo';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { CreateUserVo } from './vo/create-user.vo';
+import { UserProfileVo, UserVo } from './vo/user.vo';
 
 @ApiTags('用户')
 @Controller('user')
@@ -31,7 +30,7 @@ export class UserController extends BaseController {
   }
 
   @ApiOperation({ description: '查询用户' })
-  @ApiOkResponse({ type: UserDetailVo })
+  @ApiOkResponse({ type: UserVo })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.userService.findOne(+id);
