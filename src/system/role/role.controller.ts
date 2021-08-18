@@ -7,8 +7,11 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from '~/core';
+import { EmptyVo } from '~/core/base/base.vo';
+import { CreateRoleVo } from '~/system/role/vo/create-role.vo';
+import { RoleBaseVo, RoleVo } from '~/system/role/vo/role.vo';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleService } from './role.service';
@@ -21,13 +24,15 @@ export class RoleController extends BaseController {
   }
 
   @ApiOperation({ description: '创建角色' })
+  @ApiOkResponse({ type: CreateRoleVo })
   @Post()
-  async create(@Body() createRoleDto: CreateRoleDto) {
-    const data = await this.roleService.create(createRoleDto);
+  async create(@Body() dto: CreateRoleDto) {
+    const data = await this.roleService.create(dto);
     return this.success(data);
   }
 
   @ApiOperation({ description: '角色列表' })
+  @ApiOkResponse({ type: RoleBaseVo, isArray: true })
   @Get()
   async findAll() {
     const data = await this.roleService.findAll();
@@ -35,6 +40,7 @@ export class RoleController extends BaseController {
   }
 
   @ApiOperation({ description: '角色详情' })
+  @ApiOkResponse({ type: RoleVo })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.roleService.findOne(+id);
@@ -42,13 +48,15 @@ export class RoleController extends BaseController {
   }
 
   @ApiOperation({ description: '更新角色' })
+  @ApiOkResponse({ type: EmptyVo })
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    const data = await this.roleService.update(+id, updateRoleDto);
+  async update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
+    const data = await this.roleService.update(+id, dto);
     return this.success(data);
   }
 
   @ApiOperation({ description: '删除角色' })
+  @ApiOkResponse({ type: EmptyVo })
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.roleService.remove(+id);

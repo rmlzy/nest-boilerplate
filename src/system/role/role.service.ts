@@ -11,10 +11,11 @@ import { BaseService } from '~/core';
 import { AccessService } from '~/system/access/access.service';
 import { AccessEntity } from '~/system/access/entities/access.entity';
 import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
+import { CreateRoleVo } from '~/system/role/vo/create-role.vo';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleEntity } from './entities/role.entity';
-import { RoleVo } from './vo/role.vo';
+import { RoleBaseVo, RoleVo } from './vo/role.vo';
 
 @Injectable()
 export class RoleService extends BaseService<RoleEntity> {
@@ -27,31 +28,33 @@ export class RoleService extends BaseService<RoleEntity> {
 
   @Transaction()
   async create(
-    createRoleDto: CreateRoleDto,
+    dto: CreateRoleDto,
     @TransactionManager() manager: EntityManager = null,
-  ): Promise<RoleEntity> {
-    const { name, accessIds } = createRoleDto;
+  ): Promise<CreateRoleVo> {
+    const { name, accessIds } = dto;
     await this.ensureNotExist({ name }, '角色名已存在');
 
     const _accessIds = await this.accessService.getValidIds(accessIds);
     await this.asset(_accessIds.length, '未检测到可用的 accessId');
 
-    const createdRole = await manager.save(RoleEntity, createRoleDto);
+    const createdRole = await manager.save(RoleEntity, dto);
     const roleAccessEntities = _accessIds.map((accessId) => ({
       accessId,
       roleId: createdRole.id,
     }));
     await manager.save(RoleAccessEntity, roleAccessEntities);
-    return createdRole;
+    return { id: createdRole.id };
   }
 
-  async findAll(): Promise<RoleEntity[]> {
-    return this.roleRepo.find();
+  async findAll(): Promise<RoleBaseVo[]> {
+    const roles = await this.roleRepo.find();
+    return roles.map((role) => role.toVo(RoleBaseVo));
   }
 
   async findOne(id: number): Promise<RoleVo> {
-    const role = (await this.ensureExist({ id }, '角色不存在')) as RoleVo;
-    role.accesses = await this.roleRepo
+    const role = await this.ensureExist({ id }, '角色不存在');
+    const vo = role.toVo(RoleVo);
+    vo.accesses = await this.roleRepo
       .createQueryBuilder('role')
       .leftJoinAndSelect(
         RoleAccessEntity,
@@ -67,17 +70,17 @@ export class RoleService extends BaseService<RoleEntity> {
       .where('role.id = :id', { id })
       .printSql()
       .execute();
-    return role;
+    return vo;
   }
 
   @Transaction()
   async update(
     id: number,
-    updateRoleDto: UpdateRoleDto,
+    dto: UpdateRoleDto,
     @TransactionManager() manager: EntityManager = null,
   ): Promise<void> {
     await this.ensureExist({ id }, '角色不存在');
-    const { accessIds = [] } = updateRoleDto;
+    const { accessIds = [] } = dto;
     if (accessIds.length) {
       const _accessIds = await this.accessService.getValidIds(accessIds);
       await manager.delete(RoleAccessEntity, { roleId: id });
@@ -87,11 +90,7 @@ export class RoleService extends BaseService<RoleEntity> {
       }));
       await manager.save(RoleAccessEntity, roleAccessEntities);
     }
-    await manager.update(
-      RoleEntity,
-      { id },
-      _.omit(updateRoleDto, ['accessIds']),
-    );
+    await manager.update(RoleEntity, { id }, _.omit(dto, ['accessIds']));
   }
 
   @Transaction()

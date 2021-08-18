@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
@@ -13,4 +14,9 @@ export class BaseEntity {
 
   @UpdateDateColumn({ comment: '更新时间' })
   updatedAt: Date;
+
+  public toVo(Class) {
+    const vo = new Class();
+    return _.pick(this, Object.keys(vo));
+  }
 }

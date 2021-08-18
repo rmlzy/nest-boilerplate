@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController, UserId } from '~/core';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { BaseController, EmptyVo, UserId } from '~/core';
 import { UserService } from '~/system/user/user.service';
+import { UserProfileVo } from '~/system/user/vo/user-profile.vo';
 import { LoginDto } from './dto/login.dto';
 import { UserTokenService } from './user-token.service';
 
@@ -23,6 +24,7 @@ export class UserTokenController extends BaseController {
   }
 
   @ApiOperation({ description: '登出' })
+  @ApiOkResponse({ type: EmptyVo })
   @Post('/logout')
   async logout(@Headers('token') token) {
     const data = await this.tokenService.logout(token);
@@ -30,6 +32,7 @@ export class UserTokenController extends BaseController {
   }
 
   @ApiOperation({ description: '用户信息' })
+  @ApiOkResponse({ type: UserProfileVo })
   @Get('/profile')
   async profile(@UserId() id: number) {
     const data = await this.userService.profile(id);

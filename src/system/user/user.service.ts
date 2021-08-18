@@ -10,9 +10,11 @@ import { BaseService, Utils } from '~/core';
 import { RoleEntity } from '~/system/role/entities/role.entity';
 import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/entities/user-role.entity';
+import { UserDetailVo } from '~/system/user/vo/user-detail.vo';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserVo, UserVo } from './vo/user.vo';
+import { CreateUserVo } from './vo/create-user.vo';
+import { UserProfileVo } from './vo/user-profile.vo';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity> {
@@ -46,15 +48,16 @@ export class UserService extends BaseService<UserEntity> {
     return { id: createdUser.id };
   }
 
-  async paginate(): Promise<UserVo[]> {
-    const users = (await this.userRepo.find()) as UserVo[];
-    return users;
+  async paginate(): Promise<UserProfileVo[]> {
+    const users = await this.userRepo.find();
+    return users.map((user) => user.toVo(UserProfileVo));
   }
 
-  async findOne(id: number): Promise<UserVo> {
+  async findOne(id: number): Promise<UserDetailVo> {
     // TODO: 查询用户的 accessIds
-    const user = (await this.ensureExist({ id }, '用户不存在')) as UserVo;
-    user.roles = await this.userRepo
+    const user = await this.ensureExist({ id }, '用户不存在');
+    const vo = user.toVo(UserDetailVo);
+    vo.roles = await this.userRepo
       .createQueryBuilder('user')
       .leftJoinAndSelect(
         UserRoleEntity,
@@ -66,12 +69,12 @@ export class UserService extends BaseService<UserEntity> {
       .where('user.id = :id', { id })
       .printSql()
       .execute();
-    return user;
+    return vo;
   }
 
-  async findByUsername(username: string): Promise<void | UserVo> {
-    const user = (await this.ensureExist({ username }, '用户不存在')) as UserVo;
-    return user;
+  async findByUsername(username: string): Promise<UserProfileVo> {
+    const user = await this.ensureExist({ username }, '用户不存在');
+    return user.toVo(UserProfileVo);
   }
 
   async verifyPassword(username: string, password: string): Promise<boolean> {
@@ -86,8 +89,8 @@ export class UserService extends BaseService<UserEntity> {
     return Utils.validatePassword(password, user.password);
   }
 
-  async profile(id: number) {
-    const user = await this.userRepo.findOne({ id });
-    return user;
+  async profile(id: number): Promise<UserProfileVo> {
+    const user = await this.ensureExist({ id });
+    return user.toVo(UserProfileVo);
   }
 }
