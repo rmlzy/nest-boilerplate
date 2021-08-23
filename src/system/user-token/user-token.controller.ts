@@ -2,7 +2,7 @@ import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController, EmptyVo, UserId } from '~/core';
 import { UserService } from '~/system/user/user.service';
-import { UserProfileVo } from '~/system/user/vo/user-profile.vo';
+import { UserProfileVo } from '~/system/user/vo/user.vo';
 import { LoginDto } from './dto/login.dto';
 import { UserTokenService } from './user-token.service';
 
