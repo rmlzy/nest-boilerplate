@@ -1,16 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UpdaterVo } from '~/core/base/base.vo';
+import { UpdaterVo } from '~/core';
 import { AccessTypeEnum } from '../access.interface';
 
-export class AccessSimpleVo {
-  @ApiProperty({ description: '资源ID' })
-  id: number;
-
-  @ApiProperty({ description: '资源名称' })
-  name: string;
-}
-
-export class AccessBaseVo extends UpdaterVo {
+export class PaginateAccessVo extends UpdaterVo {
   @ApiProperty({ description: '资源ID' })
   id: number;
 
@@ -25,7 +17,4 @@ export class AccessBaseVo extends UpdaterVo {
 
   @ApiProperty({ description: '排序' })
   sort: number;
-
-  @ApiProperty({ description: '资源描述' })
-  description: string;
 }

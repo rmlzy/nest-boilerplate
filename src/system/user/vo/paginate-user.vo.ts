@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UpdaterVo } from '~/core';
-import { RoleSimpleVo } from '~/system/role/vo/role.vo';
 
-export class UserProfileVo {
+export class PaginateUserVo extends UpdaterVo {
   @ApiProperty({ description: '用户ID' })
   id: number;
 
@@ -14,10 +13,4 @@ export class UserProfileVo {
 
   @ApiProperty({ description: '电子邮件' })
   email: string;
-}
-
-export class UserBaseVo extends UpdaterVo {}
-
-export class UserVo extends UserBaseVo {
-  roles: RoleSimpleVo[];
 }

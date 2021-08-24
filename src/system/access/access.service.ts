@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseService } from '~/core';
-import { CreateAccessDto } from './dto/create-access.dto';
-import { UpdateAccessDto } from './dto/update-access.dto';
+import { BaseService, Utils } from '~/core';
+import { CreateAccessDto, UpdateAccessDto } from './dto';
 import { AccessEntity } from './entities/access.entity';
-import { AccessBaseVo } from './vo/access.vo';
-import { CreateAccessVo } from './vo/create-access.vo';
+import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './vo';
 
 @Injectable()
 export class AccessService extends BaseService<AccessEntity> {
@@ -21,17 +19,17 @@ export class AccessService extends BaseService<AccessEntity> {
     const { name } = createAccessDto;
     await this.ensureNotExist({ name }, '资源名已存在');
     const access = await this.accessRepo.save(createAccessDto);
-    return access.toVo(CreateAccessVo);
+    return Utils.docToVo(access, CreateAccessVo);
   }
 
-  async findAll(): Promise<AccessBaseVo[]> {
+  async paginate(): Promise<PaginateAccessVo[]> {
     const accesses = await this.accessRepo.find();
-    return accesses.map((access) => access.toVo(CreateAccessVo));
+    return Utils.docsToVo(accesses, PaginateAccessVo);
   }
 
-  async findOne(id: number): Promise<AccessBaseVo> {
+  async findOne(id: number): Promise<FindAccessVo> {
     const access = await this.ensureExist({ id }, '资源不存在');
-    return access.toVo(CreateAccessVo);
+    return Utils.docToVo(access, FindAccessVo);
   }
 
   async update(id: number, updateAccessDto: UpdateAccessDto): Promise<void> {

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
+import * as _ from 'lodash';
 import { IJwtPayload } from '~/core';
 
 @Injectable()
@@ -35,5 +36,14 @@ export class Utils {
   static decodeToken(token): IJwtPayload {
     const jwtService = new JwtService({});
     return jwtService.decode(token, { json: true }) as IJwtPayload;
+  }
+
+  static docToVo<T>(docs, Vo) {
+    const vo = new Vo();
+    return _.pick(docs, Object.keys(vo)) as T;
+  }
+
+  static docsToVo<T>(docs, Vo) {
+    return (docs || []).map((doc) => Utils.docToVo(doc, Vo)) as T[];
   }
 }
