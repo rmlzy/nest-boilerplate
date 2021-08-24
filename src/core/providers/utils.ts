@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
@@ -45,5 +45,9 @@ export class Utils {
 
   static docsToVo<T>(docs, Vo) {
     return (docs || []).map((doc) => Utils.docToVo(doc, Vo)) as T[];
+  }
+
+  static success(data) {
+    return { statusCode: HttpStatus.OK, message: 'OK', data };
   }
 }

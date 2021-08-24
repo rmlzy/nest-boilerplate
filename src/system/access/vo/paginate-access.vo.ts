@@ -4,17 +4,17 @@ import { AccessTypeEnum } from '../access.interface';
 
 export class PaginateAccessVo extends UpdaterVo {
   @ApiProperty({ description: '资源ID' })
-  id: number;
+  id: number = 0;
 
   @ApiProperty({ description: '资源名称' })
-  name: string;
+  name: string = '';
 
   @ApiProperty({ description: '资源类型' })
-  type: AccessTypeEnum;
+  type: AccessTypeEnum = AccessTypeEnum.DEFAULT;
 
   @ApiProperty({ description: '父级ID' })
-  parentId: number;
+  parentId: number = 0;
 
   @ApiProperty({ description: '排序' })
-  sort: number;
+  sort: number = 0;
 }

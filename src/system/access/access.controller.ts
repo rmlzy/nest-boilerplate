@@ -8,24 +8,22 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController, EmptyVo } from '~/core';
+import { EmptyVo, Utils } from '~/core';
 import { AccessService } from './access.service';
 import { CreateAccessDto, UpdateAccessDto } from './dto';
 import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './vo';
 
 @ApiTags('资源')
 @Controller('access')
-export class AccessController extends BaseController {
-  constructor(private readonly accessService: AccessService) {
-    super();
-  }
+export class AccessController {
+  constructor(private readonly accessService: AccessService) {}
 
   @ApiOperation({ description: '创建资源' })
   @ApiOkResponse({ type: CreateAccessVo })
   @Post()
   async create(@Body() createAccessDto: CreateAccessDto) {
     const data = await this.accessService.create(createAccessDto);
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询资源列表' })
@@ -33,7 +31,7 @@ export class AccessController extends BaseController {
   @Get()
   async paginate() {
     const data = await this.accessService.paginate();
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询资源详情' })
@@ -41,18 +39,15 @@ export class AccessController extends BaseController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.accessService.findOne(+id);
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '修改资源' })
   @ApiOkResponse({ type: EmptyVo })
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateAccessDto: UpdateAccessDto,
-  ) {
-    const data = await this.accessService.update(+id, updateAccessDto);
-    return this.success(data);
+  async update(@Param('id') id: string, @Body() dto: UpdateAccessDto) {
+    const data = await this.accessService.update(+id, dto);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '删除资源' })
@@ -60,6 +55,6 @@ export class AccessController extends BaseController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.accessService.remove(+id);
-    return this.success(data);
+    return Utils.success(data);
   }
 }

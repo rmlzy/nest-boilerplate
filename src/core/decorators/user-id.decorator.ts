@@ -14,6 +14,7 @@ export const UserId = createParamDecorator(
       throw new HttpException('未登录', HttpStatus.UNAUTHORIZED);
     }
     const { id } = Utils.decodeToken(token);
+    console.log(id);
     return id;
   },
 );

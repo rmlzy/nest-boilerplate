@@ -7,8 +7,14 @@ export class AccessEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 50, comment: '资源名称' })
   name: string;
 
+  @Column({ type: 'varchar', length: 100, comment: '唯一标志' })
+  code: string;
+
   @Column({ type: 'tinyint', comment: '资源类型' })
   type: AccessTypeEnum;
+
+  @Column({ type: 'varchar', length: 100, comment: '内容' })
+  content: string;
 
   @Column({ type: 'int', default: 0, comment: '父级ID' })
   parentId: number;

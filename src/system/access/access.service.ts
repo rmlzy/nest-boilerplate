@@ -15,10 +15,10 @@ export class AccessService extends BaseService<AccessEntity> {
     super(accessRepo);
   }
 
-  async create(createAccessDto: CreateAccessDto): Promise<CreateAccessVo> {
-    const { name } = createAccessDto;
+  async create(dto: CreateAccessDto): Promise<CreateAccessVo> {
+    const { name } = dto;
     await this.ensureNotExist({ name }, '资源名已存在');
-    const access = await this.accessRepo.save(createAccessDto);
+    const access = await this.accessRepo.save(dto);
     return Utils.docToVo(access, CreateAccessVo);
   }
 
@@ -28,16 +28,19 @@ export class AccessService extends BaseService<AccessEntity> {
   }
 
   async findOne(id: number): Promise<FindAccessVo> {
+    this.asset(!isNaN(id), '参数不合法');
     const access = await this.ensureExist({ id }, '资源不存在');
     return Utils.docToVo(access, FindAccessVo);
   }
 
-  async update(id: number, updateAccessDto: UpdateAccessDto): Promise<void> {
+  async update(id: number, dto: UpdateAccessDto): Promise<void> {
+    this.asset(!isNaN(id), '参数不合法');
     await this.ensureExist({ id }, '资源不存在');
-    await this.accessRepo.update({ id }, updateAccessDto);
+    await this.accessRepo.update({ id }, dto);
   }
 
   async remove(id: number): Promise<void> {
+    this.asset(!isNaN(id), '参数不合法');
     await this.ensureExist({ id }, '资源不存在');
     await this.accessRepo.delete({ id });
   }
