@@ -10,10 +10,9 @@ import { BaseService, Utils } from '~/core';
 import { RoleEntity } from '~/system/role/entities/role.entity';
 import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/entities/user-role.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserVo } from './vo/create-user.vo';
-import { UserProfileVo, UserVo } from './vo/user.vo';
+import { CreateUserVo, FindUserVo, PaginateUserVo } from './vo';
 
 @Injectable()
 export class UserService extends BaseService<UserEntity> {
@@ -47,15 +46,15 @@ export class UserService extends BaseService<UserEntity> {
     return { id: createdUser.id };
   }
 
-  async paginate(): Promise<UserProfileVo[]> {
+  async paginate(): Promise<PaginateUserVo[]> {
     const users = await this.userRepo.find();
-    return users.map((user) => user.toVo(UserProfileVo));
+    return Utils.docsToVo(users, PaginateUserVo);
   }
 
-  async findOne(id: number): Promise<UserVo> {
+  async findOne(id: number): Promise<FindUserVo> {
     // TODO: 查询用户的 accessIds
     const user = await this.ensureExist({ id }, '用户不存在');
-    const vo = user.toVo(UserVo);
+    const vo = Utils.docToVo<FindUserVo>(user, FindUserVo);
     vo.roles = await this.userRepo
       .createQueryBuilder('user')
       .leftJoinAndSelect(
@@ -71,9 +70,9 @@ export class UserService extends BaseService<UserEntity> {
     return vo;
   }
 
-  async findByUsername(username: string): Promise<UserProfileVo> {
+  async findByUsername(username: string): Promise<FindUserVo> {
     const user = await this.ensureExist({ username }, '用户不存在');
-    return user.toVo(UserProfileVo);
+    return Utils.docToVo(user, FindUserVo);
   }
 
   async verifyPassword(username: string, password: string): Promise<boolean> {
@@ -88,8 +87,8 @@ export class UserService extends BaseService<UserEntity> {
     return Utils.validatePassword(password, user.password);
   }
 
-  async profile(id: number): Promise<UserProfileVo> {
+  async profile(id: number): Promise<FindUserVo> {
     const user = await this.ensureExist({ id });
-    return user.toVo(UserProfileVo);
+    return Utils.docToVo(user, FindUserVo);
   }
 }

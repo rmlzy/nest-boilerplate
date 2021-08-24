@@ -7,15 +7,13 @@ import {
   Transaction,
   TransactionManager,
 } from 'typeorm';
-import { BaseService } from '~/core';
+import { BaseService, Utils } from '~/core';
 import { AccessService } from '~/system/access/access.service';
 import { AccessEntity } from '~/system/access/entities/access.entity';
 import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
-import { CreateRoleVo } from '~/system/role/vo/create-role.vo';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { RoleEntity } from './entities/role.entity';
-import { RoleBaseVo, RoleVo } from './vo/role.vo';
+import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './vo';
 
 @Injectable()
 export class RoleService extends BaseService<RoleEntity> {
@@ -46,14 +44,14 @@ export class RoleService extends BaseService<RoleEntity> {
     return { id: createdRole.id };
   }
 
-  async findAll(): Promise<RoleBaseVo[]> {
+  async paginate(): Promise<PaginateRoleVo[]> {
     const roles = await this.roleRepo.find();
-    return roles.map((role) => role.toVo(RoleBaseVo));
+    return Utils.docsToVo(roles, PaginateRoleVo);
   }
 
-  async findOne(id: number): Promise<RoleVo> {
+  async findOne(id: number): Promise<FindRoleVo> {
     const role = await this.ensureExist({ id }, '角色不存在');
-    const vo = role.toVo(RoleVo);
+    const vo = Utils.docToVo<FindRoleVo>(role, FindRoleVo);
     vo.accesses = await this.roleRepo
       .createQueryBuilder('role')
       .leftJoinAndSelect(

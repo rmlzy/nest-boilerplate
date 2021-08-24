@@ -8,13 +8,10 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController } from '~/core';
-import { EmptyVo } from '~/core/base/base.vo';
-import { CreateRoleVo } from '~/system/role/vo/create-role.vo';
-import { RoleBaseVo, RoleVo } from '~/system/role/vo/role.vo';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { BaseController, EmptyVo } from '~/core';
+import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { RoleService } from './role.service';
+import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './vo';
 
 @ApiTags('角色')
 @Controller('role')
@@ -32,15 +29,15 @@ export class RoleController extends BaseController {
   }
 
   @ApiOperation({ description: '角色列表' })
-  @ApiOkResponse({ type: RoleBaseVo, isArray: true })
+  @ApiOkResponse({ type: PaginateRoleVo, isArray: true })
   @Get()
-  async findAll() {
-    const data = await this.roleService.findAll();
+  async paginate() {
+    const data = await this.roleService.paginate();
     return this.success(data);
   }
 
   @ApiOperation({ description: '角色详情' })
-  @ApiOkResponse({ type: RoleVo })
+  @ApiOkResponse({ type: FindRoleVo })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.roleService.findOne(+id);
