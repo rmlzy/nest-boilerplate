@@ -34,6 +34,7 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({ type: [Number], description: '角色ID' })
+  @IsOptional()
   @IsArray({ message: '角色ID必须是数组' })
   roleIds: number[];
 }

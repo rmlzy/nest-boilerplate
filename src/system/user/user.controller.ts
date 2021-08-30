@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Utils } from '~/core';
 import { CreateUserDto } from './dto';
@@ -21,8 +21,8 @@ export class UserController {
   @ApiOperation({ description: '查询用户列表' })
   @ApiOkResponse({ type: PaginateUserVo, isArray: true })
   @Get()
-  async paginate() {
-    const data = await this.userService.paginate();
+  async paginate(@Query() query) {
+    const data = await this.userService.paginate(query);
     return Utils.success(data);
   }
 

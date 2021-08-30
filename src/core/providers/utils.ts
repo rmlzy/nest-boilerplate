@@ -47,6 +47,15 @@ export class Utils {
     return (docs || []).map((doc) => Utils.docToVo(doc, Vo)) as T[];
   }
 
+  static isNumeric(value) {
+    return (
+      !isNaN(value) &&
+      typeof value !== 'object' &&
+      value != Number.POSITIVE_INFINITY &&
+      value != Number.NEGATIVE_INFINITY
+    );
+  }
+
   static success(data) {
     return { statusCode: HttpStatus.OK, message: 'OK', data };
   }
@@ -55,5 +64,16 @@ export class Utils {
     if (!condition) {
       throw new NotAcceptableException(invalidMsg);
     }
+  }
+
+  static parseQuery(query) {
+    let { pageIndex, pageSize, ...rest } = query;
+    pageIndex = Utils.isNumeric(pageIndex) ? Number(pageIndex) : 1;
+    pageSize = Utils.isNumeric(pageSize) ? Number(pageSize) : 20;
+    return {
+      skip: (pageIndex - 1) * pageSize,
+      take: pageSize,
+      ...rest,
+    };
   }
 }

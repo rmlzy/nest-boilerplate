@@ -12,7 +12,7 @@ import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/entities/user-role.entity';
 import { CreateUserDto } from './dto';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserVo, FindUserVo, PaginateUserVo } from './vo';
+import { CreateUserVo, FindUserVo } from './vo';
 
 @Injectable()
 export class UserService {
@@ -27,7 +27,7 @@ export class UserService {
     dto: CreateUserDto,
     @TransactionManager() manager: EntityManager = null,
   ): Promise<CreateUserVo> {
-    const { username, realname, email, roleIds } = dto;
+    const { username, realname, email, roleIds = [] } = dto;
 
     const usernameCount = await this.userRepo.count({ username });
     Utils.assert(usernameCount === 0, '用户名已存在');
@@ -47,11 +47,10 @@ export class UserService {
     return { id: createdUser.id };
   }
 
-  async paginate(): Promise<PaginateUserVo[]> {
-    const users = await this.userRepo.find();
-    Utils.assert(users, '用户不存在');
-
-    return Utils.docsToVo(users, PaginateUserVo);
+  async paginate(query) {
+    const { skip, take } = Utils.parseQuery(query);
+    const [items, total] = await this.userRepo.findAndCount({ skip, take });
+    return { total, items };
   }
 
   async findOne(id: number): Promise<FindUserVo> {
