@@ -7,7 +7,7 @@ import {
   Transaction,
   TransactionManager,
 } from 'typeorm';
-import { BaseService, Utils } from '~/core';
+import { Utils } from '~/core';
 import { AccessService } from '~/system/access/access.service';
 import { AccessEntity } from '~/system/access/entities/access.entity';
 import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
@@ -16,13 +16,11 @@ import { RoleEntity } from './entities/role.entity';
 import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './vo';
 
 @Injectable()
-export class RoleService extends BaseService<RoleEntity> {
+export class RoleService {
   constructor(
     @InjectRepository(RoleEntity) private roleRepo: Repository<RoleEntity>,
     private accessService: AccessService,
-  ) {
-    super(roleRepo);
-  }
+  ) {}
 
   @Transaction()
   async create(
@@ -30,10 +28,12 @@ export class RoleService extends BaseService<RoleEntity> {
     @TransactionManager() manager: EntityManager = null,
   ): Promise<CreateRoleVo> {
     const { name, accessIds } = dto;
-    await this.ensureNotExist({ name }, '角色名已存在');
+
+    const usernameCount = await this.roleRepo.count({ name });
+    Utils.assert(usernameCount === 0, '角色已存在');
 
     const _accessIds = await this.accessService.getValidIds(accessIds);
-    await this.asset(_accessIds.length, '未检测到可用的 accessId');
+    Utils.assert(_accessIds.length > 0, '未检测到可用的 accessId');
 
     const createdRole = await manager.save(RoleEntity, dto);
     const roleAccessEntities = _accessIds.map((accessId) => ({
@@ -50,7 +50,9 @@ export class RoleService extends BaseService<RoleEntity> {
   }
 
   async findOne(id: number): Promise<FindRoleVo> {
-    const role = await this.ensureExist({ id }, '角色不存在');
+    const role = await this.roleRepo.find({ id });
+    Utils.assert(role, '角色不存在');
+
     const vo = Utils.docToVo<FindRoleVo>(role, FindRoleVo);
     vo.accesses = await this.roleRepo
       .createQueryBuilder('role')
@@ -77,7 +79,9 @@ export class RoleService extends BaseService<RoleEntity> {
     dto: UpdateRoleDto,
     @TransactionManager() manager: EntityManager = null,
   ): Promise<void> {
-    await this.ensureExist({ id }, '角色不存在');
+    const roleCount = await this.roleRepo.count({ id });
+    Utils.assert(roleCount, '角色不存在');
+
     const { accessIds = [] } = dto;
     if (accessIds.length) {
       const _accessIds = await this.accessService.getValidIds(accessIds);
@@ -96,8 +100,14 @@ export class RoleService extends BaseService<RoleEntity> {
     id: number,
     @TransactionManager() manager: EntityManager = null,
   ): Promise<void> {
-    await this.ensureExist({ id }, '角色不存在');
+    const roleCount = await this.roleRepo.count({ id });
+    Utils.assert(roleCount, '角色不存在');
+
     await manager.delete(RoleEntity, { id });
     await manager.delete(RoleAccessEntity, { roleId: id });
+  }
+
+  async getValidIds(ids) {
+    return ids;
   }
 }

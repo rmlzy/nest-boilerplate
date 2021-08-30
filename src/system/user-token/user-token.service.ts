@@ -19,9 +19,8 @@ export class UserTokenService {
     private configService: ConfigService,
   ) {}
 
-  async login(loginDto: LoginDto): Promise<string> {
-    const { username, password } = loginDto;
-    console.log(loginDto, 11);
+  async login(dto: LoginDto): Promise<string> {
+    const { username, password } = dto;
 
     const valid = await this.userService.verifyPassword(username, password);
     if (!valid) {
@@ -35,7 +34,6 @@ export class UserTokenService {
 
     const expireInDay = this.configService.get('TOKEN_EXPIRES_IN_DAY') || 1;
     const payload: IJwtPayload = { id: user.id, username };
-    console.log(payload, '111');
     const token = this.jwtService.sign(payload, {
       expiresIn: `${expireInDay}d`,
     });

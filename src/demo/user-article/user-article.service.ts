@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from '~/core';
-import { UserArticleEntity } from './entities/user-article.entity';
 import { UserArticleRepository } from './entities/user-article.repository';
 
 @Injectable()
-export class UserArticleService extends BaseService<UserArticleEntity> {
-  constructor(private readonly userArticleRepo: UserArticleRepository) {
-    super(userArticleRepo);
-  }
+export class UserArticleService {
+  constructor(private readonly userArticleRepo: UserArticleRepository) {}
 
   async findArticlesByUserId(userId: string) {
     console.log(userId);

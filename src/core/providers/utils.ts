@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
@@ -49,5 +49,11 @@ export class Utils {
 
   static success(data) {
     return { statusCode: HttpStatus.OK, message: 'OK', data };
+  }
+
+  static assert(condition, invalidMsg) {
+    if (!condition) {
+      throw new NotAcceptableException(invalidMsg);
+    }
   }
 }

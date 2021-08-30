@@ -8,24 +8,22 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController, EmptyVo } from '~/core';
+import { EmptyVo, Utils } from '~/core';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { RoleService } from './role.service';
 import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './vo';
 
 @ApiTags('角色')
 @Controller('role')
-export class RoleController extends BaseController {
-  constructor(private readonly roleService: RoleService) {
-    super();
-  }
+export class RoleController {
+  constructor(private readonly roleService: RoleService) {}
 
   @ApiOperation({ description: '创建角色' })
   @ApiOkResponse({ type: CreateRoleVo })
   @Post()
   async create(@Body() dto: CreateRoleDto) {
     const data = await this.roleService.create(dto);
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '角色列表' })
@@ -33,7 +31,7 @@ export class RoleController extends BaseController {
   @Get()
   async paginate() {
     const data = await this.roleService.paginate();
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '角色详情' })
@@ -41,7 +39,7 @@ export class RoleController extends BaseController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.roleService.findOne(+id);
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '更新角色' })
@@ -49,7 +47,7 @@ export class RoleController extends BaseController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
     const data = await this.roleService.update(+id, dto);
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '删除角色' })
@@ -57,6 +55,6 @@ export class RoleController extends BaseController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.roleService.remove(+id);
-    return this.success(data);
+    return Utils.success(data);
   }
 }

@@ -1,23 +1,21 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BaseController } from '~/core';
+import { Utils } from '~/core';
 import { CreateUserDto } from './dto';
 import { UserService } from './user.service';
 import { CreateUserVo, FindUserVo, PaginateUserVo } from './vo';
 
 @ApiTags('用户')
 @Controller('user')
-export class UserController extends BaseController {
-  constructor(private readonly userService: UserService) {
-    super();
-  }
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ description: '创建用户' })
   @ApiOkResponse({ type: CreateUserVo })
   @Post()
   async create(@Body() dto: CreateUserDto) {
     const data = await this.userService.create(dto);
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询用户列表' })
@@ -25,7 +23,7 @@ export class UserController extends BaseController {
   @Get()
   async paginate() {
     const data = await this.userService.paginate();
-    return this.success(data);
+    return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询用户' })
@@ -33,6 +31,6 @@ export class UserController extends BaseController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.userService.findOne(+id);
-    return this.success(data);
+    return Utils.success(data);
   }
 }
