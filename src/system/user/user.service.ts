@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   EntityManager,
+  Like,
   Repository,
   Transaction,
   TransactionManager,
@@ -48,8 +49,20 @@ export class UserService {
   }
 
   async paginate(query) {
-    const { skip, take } = Utils.parseQuery(query);
-    const [items, total] = await this.userRepo.findAndCount({ skip, take });
+    const {
+      skip,
+      take,
+      username = '',
+      realname = '',
+    } = Utils.parseQuery(query);
+    const [items, total] = await this.userRepo.findAndCount({
+      where: [
+        { username: Like(`%${username}%`) },
+        { realname: Like(`%${realname}%`) },
+      ],
+      skip,
+      take,
+    });
     return { total, items };
   }
 
