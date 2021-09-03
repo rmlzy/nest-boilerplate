@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UpdaterVo } from '~/core';
-import { SimpleRoleVo } from '~/system/role/vo';
+import { SimpleRoleVo } from '~/system/role/role.vo';
 
 export class CreateUserVo {
   @ApiProperty({ description: '用户ID' })

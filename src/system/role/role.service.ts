@@ -10,7 +10,7 @@ import {
 import { Utils } from '~/core';
 import { AccessEntity } from '~/system/access/access.entity';
 import { AccessService } from '~/system/access/access.service';
-import { RoleAccessEntity } from '~/system/role-access/entities/role-access.entity';
+import { RoleAccessEntity } from '~/system/role-access/role-access.entity';
 import { CreateRoleDto, UpdateRoleDto } from './role.dto';
 import { RoleEntity } from './role.entity';
 import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './role.vo';

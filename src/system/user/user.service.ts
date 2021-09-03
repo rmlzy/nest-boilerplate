@@ -8,9 +8,9 @@ import {
   TransactionManager,
 } from 'typeorm';
 import { Utils } from '~/core';
-import { RoleEntity } from '~/system/role/entities/role.entity';
+import { RoleEntity } from '~/system/role/role.entity';
 import { RoleService } from '~/system/role/role.service';
-import { UserRoleEntity } from '~/system/user-role/entities/user-role.entity';
+import { UserRoleEntity } from '~/system/user-role/user-role.entity';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './user.dto';
 import { CreateUserVo, FindUserVo } from './user.vo';
