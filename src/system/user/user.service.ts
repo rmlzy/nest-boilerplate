@@ -48,18 +48,16 @@ export class UserService {
     return { id: createdUser.id };
   }
 
-  async paginate(query) {
-    const {
-      skip,
-      take,
-      username = '',
-      realname = '',
-    } = Utils.parseQuery(query);
+  async paginate({ skip, take, username, realname }) {
+    const where = [];
+    if (username) {
+      where.push({ username: Like(`%${username}%`) });
+    }
+    if (realname) {
+      where.push({ realname: Like(`%${realname}%`) });
+    }
     const [items, total] = await this.userRepo.findAndCount({
-      where: [
-        { username: Like(`%${username}%`) },
-        { realname: Like(`%${realname}%`) },
-      ],
+      where,
       skip,
       take,
     });

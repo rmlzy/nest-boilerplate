@@ -22,7 +22,18 @@ export class UserController {
   @ApiOkResponse({ type: PaginateUserVo, isArray: true })
   @Get()
   async paginate(@Query() query) {
-    const data = await this.userService.paginate(query);
+    const {
+      skip,
+      take,
+      username = '',
+      realname = '',
+    } = Utils.parseQuery(query);
+    const data = await this.userService.paginate({
+      skip,
+      take,
+      username,
+      realname,
+    });
     return Utils.success(data);
   }
 
