@@ -6,8 +6,8 @@ import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { IJwtPayload } from '~/core';
 import { UserService } from '~/system/user/user.service';
-import { LoginDto } from './dto/login.dto';
-import { UserTokenEntity } from './entities/user-token.entity';
+import { LoginDto } from './user-token.dto';
+import { UserTokenEntity } from './user-token.entity';
 
 @Injectable()
 export class UserTokenService {

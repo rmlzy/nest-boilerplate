@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
   IsEnum,
   IsNotEmpty,
@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { AccessTypeEnum } from '../access.interface';
+import { AccessTypeEnum } from './access.interface';
 
 export class CreateAccessDto {
   @ApiProperty({ description: '资源名称' })
@@ -25,3 +25,5 @@ export class CreateAccessDto {
   @MaxLength(100, { message: '资源描述最多包含100个字符' })
   description: string;
 }
+
+export class UpdateAccessDto extends PartialType(CreateAccessDto) {}

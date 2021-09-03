@@ -11,9 +11,9 @@ import { Utils } from '~/core';
 import { RoleEntity } from '~/system/role/entities/role.entity';
 import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/entities/user-role.entity';
-import { CreateUserDto } from './dto';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserVo, FindUserVo } from './vo';
+import { CreateUserDto } from './user.dto';
+import { CreateUserVo, FindUserVo } from './user.vo';
 
 @Injectable()
 export class UserService {

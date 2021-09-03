@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Utils } from '~/core';
-import { CreateAccessDto, UpdateAccessDto } from './dto';
-import { AccessEntity } from './entities/access.entity';
-import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './vo';
+import { CreateAccessDto, UpdateAccessDto } from './access.dto';
+import { AccessEntity } from './access.entity';
+import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './access.vo';
 
 @Injectable()
 export class AccessService {

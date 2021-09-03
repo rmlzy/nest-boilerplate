@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
   IsArray,
   IsNotEmpty,
@@ -23,3 +23,5 @@ export class CreateRoleDto {
   @IsArray({ message: '资源ID必须是数组' })
   accessIds: number[];
 }
+
+export class UpdateRoleDto extends PartialType(CreateRoleDto) {}

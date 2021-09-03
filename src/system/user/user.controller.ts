@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Utils } from '~/core';
-import { CreateUserDto } from './dto';
+import { CreateUserDto } from './user.dto';
 import { UserService } from './user.service';
-import { CreateUserVo, FindUserVo, PaginateUserVo } from './vo';
+import { CreateUserVo, FindUserVo, PaginateUserVo } from './user.vo';
 
 @ApiTags('用户')
 @Controller('user')

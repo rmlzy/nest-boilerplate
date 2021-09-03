@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '~/core';
-import { AccessTypeEnum } from '../access.interface';
+import { AccessTypeEnum } from './access.interface';
 
 @Entity('sys_access')
 export class AccessEntity extends BaseEntity {

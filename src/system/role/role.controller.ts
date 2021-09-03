@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { EmptyVo, Utils } from '~/core';
-import { CreateRoleDto, UpdateRoleDto } from './dto';
+import { CreateRoleDto, UpdateRoleDto } from './role.dto';
 import { RoleService } from './role.service';
-import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './vo';
+import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './role.vo';
 
 @ApiTags('角色')
 @Controller('role')

@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { EmptyVo, Utils } from '~/core';
+import { CreateAccessDto, UpdateAccessDto } from './access.dto';
 import { AccessService } from './access.service';
-import { CreateAccessDto, UpdateAccessDto } from './dto';
-import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './vo';
+import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './access.vo';
 
 @ApiTags('资源')
 @Controller('access')

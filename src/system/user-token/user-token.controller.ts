@@ -2,8 +2,8 @@ import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { EmptyVo, UserId, Utils } from '~/core';
 import { UserService } from '~/system/user/user.service';
-import { FindUserVo } from '~/system/user/vo';
-import { LoginDto } from './dto/login.dto';
+import { FindUserVo } from '~/system/user/user.vo';
+import { LoginDto } from './user-token.dto';
 import { UserTokenService } from './user-token.service';
 
 @ApiTags('授权')
