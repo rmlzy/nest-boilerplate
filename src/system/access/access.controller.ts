@@ -3,56 +3,66 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { EmptyVo, Utils } from '~/core';
+import { ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiEmptyResp, ApiOkResp, ApiPageResp, Utils } from '~/core';
 import { CreateAccessDto, UpdateAccessDto } from './access.dto';
 import { AccessService } from './access.service';
-import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './access.vo';
+import { CreateAccessVo, FindAccessVo, PageAccessVo } from './access.vo';
 
 @ApiTags('资源')
+@ApiExtraModels(CreateAccessVo, PageAccessVo, FindAccessVo)
 @Controller('access')
 export class AccessController {
   constructor(private readonly accessService: AccessService) {}
 
   @ApiOperation({ description: '创建资源' })
-  @ApiOkResponse({ type: CreateAccessVo })
+  @ApiOkResp(CreateAccessVo)
   @Post()
-  async create(@Body() createAccessDto: CreateAccessDto) {
-    const data = await this.accessService.create(createAccessDto);
+  @HttpCode(HttpStatus.OK)
+  async create(@Body() dto: CreateAccessDto) {
+    const data = await this.accessService.create(dto);
     return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询资源列表' })
-  @ApiOkResponse({ type: PaginateAccessVo, isArray: true })
+  @ApiPageResp(PageAccessVo)
   @Get()
-  async paginate() {
-    const data = await this.accessService.paginate();
+  @HttpCode(HttpStatus.OK)
+  async paginate(@Query() query) {
+    const { skip, take } = Utils.parseQuery(query);
+    const data = await this.accessService.paginate({ skip, take });
     return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询资源详情' })
-  @ApiOkResponse({ type: FindAccessVo })
+  @ApiOkResp(FindAccessVo)
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     const data = await this.accessService.findOne(+id);
     return Utils.success(data);
   }
 
   @ApiOperation({ description: '修改资源' })
-  @ApiOkResponse({ type: EmptyVo })
+  @ApiEmptyResp()
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
   async update(@Param('id') id: string, @Body() dto: UpdateAccessDto) {
     const data = await this.accessService.update(+id, dto);
     return Utils.success(data);
   }
 
   @ApiOperation({ description: '删除资源' })
-  @ApiOkResponse({ type: EmptyVo })
+  @ApiEmptyResp()
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string) {
     const data = await this.accessService.remove(+id);
     return Utils.success(data);

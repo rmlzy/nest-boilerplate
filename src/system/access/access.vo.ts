@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { UpdaterVo } from '~/core';
 import { AccessTypeEnum } from './access.interface';
@@ -5,6 +6,12 @@ import { AccessTypeEnum } from './access.interface';
 export class CreateAccessVo {
   @ApiProperty({ description: '资源ID' })
   id: number = 0;
+}
+
+export class Resp<T> {
+  statusCode: HttpStatus;
+  message: string;
+  data: T;
 }
 
 export class FindAccessVo extends UpdaterVo {
@@ -27,7 +34,7 @@ export class FindAccessVo extends UpdaterVo {
   description: string = '';
 }
 
-export class PaginateAccessVo extends UpdaterVo {
+export class PageAccessVo extends UpdaterVo {
   @ApiProperty({ description: '资源ID' })
   id: number = 0;
 

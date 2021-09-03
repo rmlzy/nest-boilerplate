@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { HealthCheckResult } from '@nestjs/terminus';
 import {
@@ -17,6 +17,7 @@ export class HealthController {
 
   @ApiOperation({ description: '健康检查' })
   @Get('/')
+  @HttpCode(HttpStatus.OK)
   @HealthCheck()
   async health(): Promise<HealthCheckResult> {
     return this.healthCheckService.check([

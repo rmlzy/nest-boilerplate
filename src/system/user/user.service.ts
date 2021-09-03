@@ -7,7 +7,7 @@ import {
   Transaction,
   TransactionManager,
 } from 'typeorm';
-import { IPage, Utils } from '~/core';
+import { PageResp, Utils } from '~/core';
 import { RoleEntity } from '~/system/role/role.entity';
 import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/user-role.entity';
@@ -48,7 +48,7 @@ export class UserService {
     return { id: createdUser.id };
   }
 
-  async paginate(params): Promise<IPage<PageUserVo>> {
+  async paginate(params): Promise<PageResp<PageUserVo>> {
     const { skip, take, username, realname } = params;
     const where = [];
     if (username) {

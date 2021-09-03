@@ -1,26 +1,38 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Utils } from '~/core';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResp, ApiPageResp, Utils } from '~/core';
 import { CreateUserDto } from './user.dto';
 import { UserService } from './user.service';
 import { CreateUserVo, FindUserVo, PageUserVo } from './user.vo';
 
 @ApiTags('用户')
+@ApiExtraModels(CreateUserDto, PageUserVo, FindUserVo)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ description: '创建用户' })
-  @ApiOkResponse({ type: CreateUserVo })
+  @ApiOkResp(CreateUserVo)
   @Post()
+  @HttpCode(HttpStatus.OK)
   async create(@Body() dto: CreateUserDto) {
     const data = await this.userService.create(dto);
     return Utils.success(data);
   }
 
   @ApiOperation({ description: '查询用户列表' })
-  @ApiOkResponse({ type: PageUserVo, isArray: true })
+  @ApiPageResp(PageUserVo)
   @Get()
+  @HttpCode(HttpStatus.OK)
   async paginate(@Query() query) {
     const {
       skip,
@@ -38,8 +50,9 @@ export class UserController {
   }
 
   @ApiOperation({ description: '查询用户' })
-  @ApiOkResponse({ type: FindUserVo })
+  @ApiOkResp(FindUserVo)
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     const data = await this.userService.findOne(+id);
     return Utils.success(data);

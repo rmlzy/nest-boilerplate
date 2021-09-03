@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { IJwtPayload } from '~/core';
+import { LoginVo } from '~/system/user-token/user-token.vo';
 import { UserService } from '~/system/user/user.service';
 import { LoginDto } from './user-token.dto';
 import { UserTokenEntity } from './user-token.entity';
@@ -19,7 +20,7 @@ export class UserTokenService {
     private configService: ConfigService,
   ) {}
 
-  async login(dto: LoginDto): Promise<string> {
+  async login(dto: LoginDto): Promise<LoginVo> {
     const { username, password } = dto;
 
     const valid = await this.userService.verifyPassword(username, password);
@@ -44,7 +45,7 @@ export class UserTokenService {
       token,
       expireAt: expireAt.toISOString(),
     });
-    return token;
+    return { token };
   }
 
   async logout(token: string): Promise<void> {

@@ -17,10 +17,14 @@ export class FindRoleVo extends UpdaterVo {
   @ApiProperty({ description: '角色描述' })
   description: string = '';
 
+  @ApiProperty({ type: SimpleAccessVo, isArray: true })
   accesses: SimpleAccessVo[] = [];
 }
 
-export class PaginateRoleVo extends UpdaterVo {
+export class PageRoleVo extends UpdaterVo {
+  @ApiProperty({ description: '角色ID' })
+  id: number = 0;
+
   @ApiProperty({ description: '角色名称' })
   name: string = '';
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UpdaterVo } from '~/core';
+import { PageResp, Resp, UpdaterVo } from '~/core';
 import { SimpleRoleVo } from '~/system/role/role.vo';
 
 export class CreateUserVo {
@@ -37,3 +37,5 @@ export class PageUserVo extends UpdaterVo {
   @ApiProperty({ description: '电子邮件' })
   email: string = '';
 }
+
+export type Example = Resp<PageResp<PageUserVo>>;

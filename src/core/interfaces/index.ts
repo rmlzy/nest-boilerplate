@@ -1,17 +1,17 @@
 import { HttpStatus } from '@nestjs/common';
 
-export interface IRes<T> {
+export class Resp<T> {
   statusCode: HttpStatus;
   message: string;
   data: T;
 }
 
-export interface IPage<T> {
+export class PageResp<T> {
   total: number;
   items: T[];
 }
 
-export interface IJwtPayload {
+export class IJwtPayload {
   id: number;
   username: string;
 }

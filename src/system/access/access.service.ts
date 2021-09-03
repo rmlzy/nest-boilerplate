@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Utils } from '~/core';
+import { PageResp, Utils } from '~/core';
 import { CreateAccessDto, UpdateAccessDto } from './access.dto';
 import { AccessEntity } from './access.entity';
-import { CreateAccessVo, FindAccessVo, PaginateAccessVo } from './access.vo';
+import { CreateAccessVo, FindAccessVo, PageAccessVo } from './access.vo';
 
 @Injectable()
 export class AccessService {
@@ -23,9 +23,12 @@ export class AccessService {
     return Utils.docToVo(access, CreateAccessVo);
   }
 
-  async paginate(): Promise<PaginateAccessVo[]> {
-    const accesses = await this.accessRepo.find();
-    return Utils.docsToVo(accesses, PaginateAccessVo);
+  async paginate({ skip, take }): Promise<PageResp<PageAccessVo>> {
+    const [items, total] = await this.accessRepo.findAndCount({
+      skip,
+      take,
+    });
+    return { total, items: Utils.docsToVo(items, PageAccessVo) };
   }
 
   async findOne(id: number): Promise<FindAccessVo> {

@@ -7,13 +7,13 @@ import {
   Transaction,
   TransactionManager,
 } from 'typeorm';
-import { Utils } from '~/core';
+import { PageResp, Utils } from '~/core';
 import { AccessEntity } from '~/system/access/access.entity';
 import { AccessService } from '~/system/access/access.service';
 import { RoleAccessEntity } from '~/system/role-access/role-access.entity';
 import { CreateRoleDto, UpdateRoleDto } from './role.dto';
 import { RoleEntity } from './role.entity';
-import { CreateRoleVo, FindRoleVo, PaginateRoleVo } from './role.vo';
+import { CreateRoleVo, FindRoleVo, PageRoleVo } from './role.vo';
 
 @Injectable()
 export class RoleService {
@@ -44,9 +44,12 @@ export class RoleService {
     return { id: createdRole.id };
   }
 
-  async paginate(): Promise<PaginateRoleVo[]> {
-    const roles = await this.roleRepo.find();
-    return Utils.docsToVo(roles, PaginateRoleVo);
+  async paginate({ skip, take }): Promise<PageResp<PageRoleVo>> {
+    const [items, total] = await this.roleRepo.findAndCount({
+      skip,
+      take,
+    });
+    return { total, items: Utils.docsToVo(items, PageRoleVo) };
   }
 
   async findOne(id: number): Promise<FindRoleVo> {
