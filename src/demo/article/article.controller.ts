@@ -10,9 +10,8 @@ import {
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Logged, UserId, Utils } from '~/core';
 import { UserArticleService } from '~/demo/user-article/user-article.service';
+import { CreateArticleDto, UpdateArticleDto } from './article.dto';
 import { ArticleService } from './article.service';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateArticleDto } from './dto/update-article.dto';
 
 @ApiTags('文章')
 @ApiHeader({ name: 'token' })

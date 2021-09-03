@@ -7,13 +7,13 @@ import {
   Transaction,
   TransactionManager,
 } from 'typeorm';
-import { Utils } from '~/core';
+import { IPage, Utils } from '~/core';
 import { RoleEntity } from '~/system/role/role.entity';
 import { RoleService } from '~/system/role/role.service';
 import { UserRoleEntity } from '~/system/user-role/user-role.entity';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './user.dto';
-import { CreateUserVo, FindUserVo } from './user.vo';
+import { CreateUserVo, FindUserVo, PageUserVo } from './user.vo';
 
 @Injectable()
 export class UserService {
@@ -48,7 +48,8 @@ export class UserService {
     return { id: createdUser.id };
   }
 
-  async paginate({ skip, take, username, realname }) {
+  async paginate(params): Promise<IPage<PageUserVo>> {
+    const { skip, take, username, realname } = params;
     const where = [];
     if (username) {
       where.push({ username: Like(`%${username}%`) });
@@ -61,7 +62,7 @@ export class UserService {
       skip,
       take,
     });
-    return { total, items };
+    return { total, items: Utils.docsToVo(items, PageUserVo) };
   }
 
   async findOne(id: number): Promise<FindUserVo> {

@@ -4,7 +4,7 @@ import { SimpleRoleVo } from '~/system/role/role.vo';
 
 export class CreateUserVo {
   @ApiProperty({ description: '用户ID' })
-  id: number;
+  id: number = 0;
 }
 
 export class FindUserVo extends UpdaterVo {
@@ -24,16 +24,16 @@ export class FindUserVo extends UpdaterVo {
   roles: SimpleRoleVo[] = [];
 }
 
-export class PaginateUserVo extends UpdaterVo {
+export class PageUserVo extends UpdaterVo {
   @ApiProperty({ description: '用户ID' })
-  id: number;
+  id: number = 0;
 
   @ApiProperty({ description: '登录账号' })
-  username: string;
+  username: string = '';
 
   @ApiProperty({ description: '真实姓名' })
-  realname: string;
+  realname: string = '';
 
   @ApiProperty({ description: '电子邮件' })
-  email: string;
+  email: string = '';
 }

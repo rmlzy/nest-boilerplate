@@ -12,7 +12,7 @@ import {
 export class HealthController {
   constructor(
     private healthCheckService: HealthCheckService,
-    private ormIndicator: TypeOrmHealthIndicator,
+    private db: TypeOrmHealthIndicator,
   ) {}
 
   @ApiOperation({ description: '健康检查' })
@@ -20,7 +20,7 @@ export class HealthController {
   @HealthCheck()
   async health(): Promise<HealthCheckResult> {
     return this.healthCheckService.check([
-      () => this.ormIndicator.pingCheck('database', { timeout: 1500 }),
+      () => this.db.pingCheck('database', { timeout: 1500 }),
     ]);
   }
 }

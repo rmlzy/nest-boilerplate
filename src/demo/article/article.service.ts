@@ -3,8 +3,7 @@ import { getConnection } from 'typeorm';
 import { Utils } from '~/core';
 import { UserArticleEntity } from '~/demo/user-article/entities/user-article.entity';
 import { UserArticleService } from '~/demo/user-article/user-article.service';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateArticleDto } from './dto/update-article.dto';
+import { CreateArticleDto, UpdateArticleDto } from './article.dto';
 import { ArticleEntity } from './entities/article.entity';
 import { ArticleRepository } from './entities/article.repository';
 

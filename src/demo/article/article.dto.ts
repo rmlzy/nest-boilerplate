@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateArticleDto {
@@ -14,3 +14,5 @@ export class CreateArticleDto {
   @MaxLength(1024, { message: '正文最多包含1024个字符' })
   content: string;
 }
+
+export class UpdateArticleDto extends PartialType(CreateArticleDto) {}

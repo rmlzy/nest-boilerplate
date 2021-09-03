@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Utils } from '~/core';
 import { CreateUserDto } from './user.dto';
 import { UserService } from './user.service';
-import { CreateUserVo, FindUserVo, PaginateUserVo } from './user.vo';
+import { CreateUserVo, FindUserVo, PageUserVo } from './user.vo';
 
 @ApiTags('用户')
 @Controller('user')
@@ -19,7 +19,7 @@ export class UserController {
   }
 
   @ApiOperation({ description: '查询用户列表' })
-  @ApiOkResponse({ type: PaginateUserVo, isArray: true })
+  @ApiOkResponse({ type: PageUserVo, isArray: true })
   @Get()
   async paginate(@Query() query) {
     const {
